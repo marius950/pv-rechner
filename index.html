@@ -7,750 +7,1700 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --green-900: #032b1c;
       --green-800: #055435;
-      --green-700: #0d4f35;
       --green-600: #156949;
       --lime-300: #bef264;
-      --lime-200: #d9f99d;
       --white: #ffffff;
-      --gray-50: #f4f5f5;
-      --muted: #727e79;
-      --text-dark: #131515;
       --radius-md: 7px;
       --radius-lg: 12px;
     }
+    body { font-family: 'Geist', -apple-system, sans-serif; background: var(--green-800); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    body {
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--green-800);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+    .page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
 
-    /* ── LAYOUT ── */
-    .page {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
-    }
+    /* ── LEFT ── */
+    .left-panel { padding: 3rem 3rem 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; min-height: 100vh; }
 
-    /* LEFT PANEL */
-    .left-panel {
-      padding: 3rem 3rem 3rem 3.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    /* RIGHT PANEL */
-    .right-panel {
-      background: rgba(0,0,0,0.18);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 2.5rem;
-      min-height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .right-panel::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 60%, rgba(190,242,100,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* ── LOGO ── */
-    .effi-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 3rem;
-    }
-    .effi-logo img {
-      height: 22px;
-      width: auto;
-      filter: brightness(0) invert(1);
-    }
+    .effi-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 3rem; }
     .effi-logo-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.18); }
     .effi-logo-service { font-size: 13px; color: rgba(255,255,255,0.38); }
 
-    /* ── PROGRESS ── */
     .progress-track { display: flex; gap: 5px; margin-bottom: 2rem; }
-    .progress-dot {
-      flex: 1; height: 2px; border-radius: 2px;
-      background: rgba(255,255,255,0.12);
-      transition: background 0.35s ease;
-    }
+    .progress-dot { flex: 1; height: 2px; border-radius: 2px; background: rgba(255,255,255,0.12); transition: background 0.35s; }
     .progress-dot.active { background: var(--lime-300); }
+    .progress-dot.done { background: rgba(190,242,100,0.45); }
 
-    /* ── STEP HEADER ── */
-    .step-eyebrow {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.09em;
-      text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 0.55rem;
-    }
-    .step-title {
-      font-size: 30px; font-weight: 600; color: var(--white);
-      line-height: 1.18; margin-bottom: 0.5rem; letter-spacing: -0.015em;
-    }
-    .step-sub {
-      font-size: 14px; color: rgba(255,255,255,0.48);
-      margin-bottom: 1.75rem; line-height: 1.6;
-    }
+    .step-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 0.55rem; }
+    .step-title { font-size: 30px; font-weight: 600; color: var(--white); line-height: 1.18; margin-bottom: 0.5rem; letter-spacing: -0.015em; }
+    .step-sub { font-size: 14px; color: rgba(255,255,255,0.48); margin-bottom: 1.75rem; line-height: 1.6; }
 
-    /* ── CARDS ── */
-    .cards-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 9px; margin-bottom: 1.5rem;
-    }
-
-    .option-card {
-      background: rgba(255,255,255,0.05);
-      border: 1.5px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-lg);
-      padding: 1.1rem;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      display: flex; flex-direction: column; gap: 9px;
-      user-select: none; position: relative;
-    }
-    .option-card:hover {
-      border-color: rgba(190,242,100,0.35);
-      background: rgba(190,242,100,0.07);
-      transform: translateY(-1px);
-    }
-    .option-card.selected {
-      border-color: var(--lime-300);
-      background: rgba(190,242,100,0.1);
-    }
-
-    .card-check {
-      position: absolute; top: 11px; right: 11px;
-      width: 18px; height: 18px; border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.18);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.18s, border-color 0.18s;
-    }
+    /* Cards */
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 1.5rem; }
+    .option-card { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 1.1rem; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; display: flex; flex-direction: column; gap: 9px; user-select: none; position: relative; }
+    .option-card:hover { border-color: rgba(190,242,100,0.35); background: rgba(190,242,100,0.07); transform: translateY(-1px); }
+    .option-card.selected { border-color: var(--lime-300); background: rgba(190,242,100,0.1); }
+    .card-check { position: absolute; top: 11px; right: 11px; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; transition: background 0.18s, border-color 0.18s; }
     .option-card.selected .card-check { background: var(--lime-300); border-color: var(--lime-300); }
     .card-check svg { width: 9px; height: 9px; stroke: var(--green-800); stroke-width: 2.5; fill: none; opacity: 0; transition: opacity 0.15s; }
     .option-card.selected .card-check svg { opacity: 1; }
-
-    .card-icon {
-      width: 38px; height: 38px; border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
+    .card-icon { width: 38px; height: 38px; border-radius: 8px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .option-card.selected .card-icon { background: var(--lime-300); }
     .card-icon svg { width: 19px; height: 19px; stroke: rgba(255,255,255,0.65); stroke-width: 1.5; fill: none; transition: stroke 0.2s; }
     .option-card.selected .card-icon svg { stroke: var(--green-800); }
-
     .card-label { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.88); }
     .card-sub { font-size: 11.5px; color: rgba(255,255,255,0.38); line-height: 1.4; }
     .option-card.selected .card-label { color: #fff; }
     .option-card.selected .card-sub { color: rgba(255,255,255,0.55); }
 
-    /* ── CTA ── */
-    .btn-cta {
-      width: 100%; padding: 14px 24px;
-      background: var(--lime-300); color: var(--green-800);
-      border: none; border-radius: var(--radius-md);
-      font-family: 'Geist', sans-serif; font-size: 15px; font-weight: 500;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: background 0.15s, transform 0.15s, opacity 0.25s;
-      opacity: 0.35; pointer-events: none;
-    }
+    /* Back button */
+    .btn-back { background: none; border: none; color: rgba(255,255,255,0.38); font-family: 'Geist', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; margin-bottom: 1.75rem; transition: color 0.15s; }
+    .btn-back:hover { color: rgba(255,255,255,0.7); }
+    .btn-back svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+    /* CTA */
+    .btn-cta { width: 100%; padding: 14px 24px; background: var(--lime-300); color: var(--green-800); border: none; border-radius: var(--radius-md); font-family: 'Geist', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s, transform 0.15s, opacity 0.25s; opacity: 0.35; pointer-events: none; }
     .btn-cta.enabled { opacity: 1; pointer-events: all; }
     .btn-cta.enabled:hover { background: #ccf36a; transform: translateY(-1px); }
     .btn-cta.enabled:active { transform: scale(0.99); }
     .btn-cta svg { width: 14px; height: 14px; stroke: var(--green-800); stroke-width: 2; fill: none; transition: transform 0.18s; }
     .btn-cta.enabled:hover svg { transform: translateX(3px); }
 
-    /* ── RIGHT: EMPTY STATE ── */
-    .right-empty {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 12px; opacity: 0.28; transition: opacity 0.4s;
-    }
-    .right-empty svg { width: 48px; height: 48px; stroke: rgba(255,255,255,0.5); stroke-width: 1; fill: none; }
-    .right-empty p { font-size: 13px; color: rgba(255,255,255,0.5); text-align: center; line-height: 1.5; }
+    /* Step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
 
-    /* ── HOUSE VISUALIZATION ── */
-    .house-viz {
-      width: 100%; max-width: 380px;
-      display: none; flex-direction: column; gap: 0; align-items: center;
-      position: relative;
-    }
+    /* ── RIGHT ── */
+    .right-panel { background: rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2.5rem; min-height: 100vh; position: relative; overflow: hidden; }
+    .right-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 55%, rgba(190,242,100,0.05) 0%, transparent 68%); pointer-events: none; }
+
+    .right-empty { display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0.25; text-align: center; }
+    .right-empty svg { width: 44px; height: 44px; stroke: rgba(255,255,255,0.45); fill: none; }
+    .right-empty p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+    @keyframes pulseArrow { 0%,100%{transform:translateX(0);opacity:.35} 50%{transform:translateX(5px);opacity:.8} }
+    .pulse-arrow { animation: pulseArrow 2s ease-in-out infinite; margin-top: 4px; }
+
+    /* House viz */
+    .house-viz { width: 100%; max-width: 400px; display: none; flex-direction: column; align-items: center; }
     .house-viz.visible { display: flex; }
 
-    /* House SVG container */
-    .house-svg-wrap {
-      width: 100%;
-      position: relative;
-    }
+    .house-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--lime-300); color: var(--green-800); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 500; margin-bottom: 1.25rem; opacity: 0; transform: translateY(-6px); transition: opacity 0.3s, transform 0.3s; }
+    .house-badge.show { opacity: 1; transform: translateY(0); }
+    .house-badge svg { width: 11px; height: 11px; stroke: var(--green-800); stroke-width: 2; fill: none; }
 
-    /* Info tags that appear step by step */
-    .house-info-tags {
-      display: flex; flex-direction: column; gap: 8px; width: 100%;
-      margin-top: 1.5rem;
-    }
+    /* SVG draw */
+    .hp { stroke-dasharray: 800; stroke-dashoffset: 800; transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .hp.drawn { stroke-dashoffset: 0; }
+    .hf { opacity: 0; transition: opacity 0.45s ease; }
+    .hf.shown { opacity: 1; }
 
-    .info-tag {
-      display: flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px; padding: 10px 14px;
-      opacity: 0;
-      transform: translateX(16px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
+    /* Roof draw — separate control */
+    .roof-path { stroke-dasharray: 600; stroke-dashoffset: 600; }
+    .roof-path.drawn { stroke-dashoffset: 0; transition: stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1); }
+    .roof-fill { opacity: 0; }
+    .roof-fill.shown { opacity: 1; transition: opacity 0.5s ease; }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .house-float { animation: float 4.5s ease-in-out infinite; }
+
+    #sun-group { opacity: 0; transition: opacity 0.6s ease; }
+    #sun-group.shown { opacity: 1; }
+    .sun-ray { opacity: 0; transition: opacity 0.2s ease; }
+    .sun-ray.shown { opacity: 1; }
+
+    /* Info tags */
+    .info-tags { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 1.4rem; }
+    .info-tag { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; padding: 10px 14px; opacity: 0; transform: translateX(12px); transition: opacity 0.35s ease, transform 0.35s ease; }
     .info-tag.show { opacity: 1; transform: translateX(0); }
+    .itdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .itlabel { font-size: 12px; color: rgba(255,255,255,0.5); flex: 1; }
+    .itval { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.88); }
 
-    .info-tag-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--lime-300); flex-shrink: 0;
-    }
-    .info-tag-label { font-size: 12px; color: rgba(255,255,255,0.55); flex: 1; }
-    .info-tag-val { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.88); }
-
-    /* House type label */
-    .house-type-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--lime-300); color: var(--green-800);
-      border-radius: 100px; padding: 5px 12px;
-      font-size: 12px; font-weight: 500;
-      margin-bottom: 1.25rem;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-    .house-type-badge.show { opacity: 1; transform: translateY(0); }
-
-    /* SVG draw animation */
-    .house-path {
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1);
-    }
-    .house-path.drawn { stroke-dashoffset: 0; }
-
-    .house-fill {
-      opacity: 0;
-      transition: opacity 0.5s ease 0.7s;
-    }
-    .house-fill.shown { opacity: 1; }
-
-    /* Solar panels draw in later */
-    .solar-panel {
-      opacity: 0;
-      transform: scaleY(0);
-      transform-origin: top center;
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    .solar-panel.shown { opacity: 1; transform: scaleY(1); }
-
-    /* Sun animation */
-    .sun-rays line {
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .sun-rays.shown line { opacity: 1; }
-    .sun-rays line:nth-child(1) { transition-delay: 0.05s; }
-    .sun-rays line:nth-child(2) { transition-delay: 0.10s; }
-    .sun-rays line:nth-child(3) { transition-delay: 0.15s; }
-    .sun-rays line:nth-child(4) { transition-delay: 0.20s; }
-    .sun-rays line:nth-child(5) { transition-delay: 0.25s; }
-    .sun-rays line:nth-child(6) { transition-delay: 0.30s; }
-    .sun-rays line:nth-child(7) { transition-delay: 0.35s; }
-    .sun-rays line:nth-child(8) { transition-delay: 0.40s; }
-
-    @keyframes rotateSun {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .sun-rotate {
-      transform-origin: 320px 60px;
-      animation: rotateSun 18s linear infinite;
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-    .house-float { animation: float 4s ease-in-out infinite; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* Animations */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     .left-panel { animation: fadeUp 0.4s ease forwards; }
-    .option-card:nth-child(1) { animation: fadeUp 0.4s 0.05s ease both; }
-    .option-card:nth-child(2) { animation: fadeUp 0.4s 0.10s ease both; }
-    .option-card:nth-child(3) { animation: fadeUp 0.4s 0.15s ease both; }
-    .option-card:nth-child(4) { animation: fadeUp 0.4s 0.20s ease both; }
+    .option-card:nth-child(1){animation:fadeUp 0.4s 0.05s ease both}
+    .option-card:nth-child(2){animation:fadeUp 0.4s 0.10s ease both}
+    .option-card:nth-child(3){animation:fadeUp 0.4s 0.15s ease both}
+    .option-card:nth-child(4){animation:fadeUp 0.4s 0.20s ease both}
 
-    @keyframes pulseArrow {
-      0%,100% { transform: translateX(0); opacity: 0.4; }
-      50% { transform: translateX(6px); opacity: 0.9; }
-    }
-    .pulse-arrow { animation: pulseArrow 2s ease-in-out infinite; }
+    /* ── ORIENT BUTTONS ── */
+    .orient-btn { padding: 6px 14px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); font-family:'Geist',sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .orient-btn:hover { border-color: rgba(190,242,100,0.4); color: #fff; background: rgba(190,242,100,0.08); }
+    .orient-btn.selected { border-color: var(--lime-300); background: rgba(190,242,100,0.15); color: var(--lime-300); }
 
-    @media (max-width: 900px) {
-      .page { grid-template-columns: 1fr; }
-      .right-panel { display: none; }
-      .left-panel { padding: 2rem 1.5rem; }
-    }
-    @media (max-width: 480px) {
-      .cards-grid { grid-template-columns: 1fr; }
-      .step-title { font-size: 24px; }
-    }
+    /* ── SLIDER ── */
+    .slider-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 1.25rem 1.25rem 1rem; margin-bottom: 10px; }
+    .slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .slider-label { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .slider-val { font-size: 22px; font-weight: 600; color: var(--white); letter-spacing: -0.02em; }
+    .slider-val span { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.45); margin-left: 3px; }
+    input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.12); outline: none; cursor: pointer; margin: 4px 0 6px; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--lime-300); border: 2px solid var(--green-800); cursor: pointer; box-shadow: 0 0 0 3px rgba(190,242,100,0.2); transition: box-shadow 0.15s; }
+    input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 5px rgba(190,242,100,0.25); }
+    input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--lime-300); border: 2px solid var(--green-800); cursor: pointer; }
+    .slider-range { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.25); }
+
+    /* ── PERSON PICKER ── */
+    .person-picker { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+    .person-label { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .person-controls { display: flex; align-items: center; gap: 16px; }
+    .person-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.18); background: none; color: var(--white); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, background 0.15s; line-height: 1; }
+    .person-btn:hover { border-color: var(--lime-300); background: rgba(190,242,100,0.1); }
+    .person-btn:active { transform: scale(0.95); }
+    .person-count { font-size: 28px; font-weight: 600; color: var(--white); min-width: 32px; text-align: center; letter-spacing: -0.02em; }
+
+    /* ── RESULT PREVIEW CARD ── */
+    .result-preview { background: rgba(190,242,100,0.08); border: 1px solid rgba(190,242,100,0.2); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 4px; }
+    .result-preview-label { font-size: 12px; color: rgba(255,255,255,0.45); }
+    .result-preview-val { font-size: 26px; font-weight: 600; color: var(--lime-300); letter-spacing: -0.02em; }
+    .result-preview-val span { font-size: 13px; font-weight: 400; color: rgba(190,242,100,0.65); margin-left: 4px; }
+    .result-preview-sub { font-size: 11.5px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    /* ── RIGHT PANEL: METRICS GRID ── */
+    .viz-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 1.5rem; }
+    .viz-metric { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 12px 14px; }
+    .vm-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .vm-val { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.015em; }
+    .vm-val span { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.4); margin-left: 3px; }
+    .vm-val.lime { color: var(--lime-300); }
+
+    /* Viz section label */
+    .viz-section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; width: 100%; }
+
+    /* Floor animation */
+    .floor-block { opacity: 0; transform: translateY(6px); transition: opacity 0.35s ease, transform 0.35s ease; }
+    .floor-block.shown { opacity: 1; transform: translateY(0); }
+
+    @media(max-width:900px){.page{grid-template-columns:1fr}.right-panel{display:none}.left-panel{padding:2rem 1.5rem}}
+    @media(max-width:480px){.cards-grid{grid-template-columns:1fr}.step-title{font-size:24px}}
   </style>
 </head>
 <body>
-
 <div class="page">
 
-  <!-- ══════════ LEFT PANEL ══════════ -->
+  <!-- ══════ LEFT ══════ -->
   <div class="left-panel">
 
     <!-- Logo -->
     <div class="effi-logo">
-      <img src="https://www.figma.com/api/mcp/asset/846a3d35-4b38-41cf-9169-cb9340c53099" alt="effi Logo">
+      <svg width="198" height="120" viewBox="0 0 198 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="effi" style="height:24px;width:auto">
+        <path d="M197 24.7019C197 32.731 190.489 39.2399 182.456 39.2399C174.424 39.2399 167.913 32.731 167.913 24.7019C167.913 16.6729 174.424 10.164 182.456 10.164C190.489 10.164 197 16.6729 197 24.7019Z" fill="#C6F35F"/>
+        <path d="M155.917 0C161.143 1.18041e-06 166.078 1.00223 169.853 2.14746C172.869 3.06289 175.31 4.73375 176.854 6.54785C171.106 9.0408 166.767 14.1087 165.341 20.2715C163.652 20.0233 162.045 19.8985 160.562 19.8984C154.059 19.8984 149.029 22.6422 149.304 31.3887V43.0771H195.461V120H170.836V61.5391H149.289V120H126.159V61.5391H110.812V120H87.2725V62.1289H78.2725V43.5186H87.2725V40.9424C87.2725 17.4652 102.659 10.5938 115.578 10.5938C119.933 10.5938 122.944 11.1984 125.434 12.168C127.441 12.9498 128.603 13.3899 129.759 13.9922C135.153 3.6283 145.787 0 155.917 0ZM39.6279 41.5391C62.8532 41.5391 80.4171 56.2839 79.2559 87.9209H24.2412C25.1123 94.9353 32.2256 100.231 41.0801 100.231C48.483 100.231 54.1438 97.2253 57.0469 91.9287L78.0947 94.0762C74.0303 109.107 58.6438 119.844 40.9346 119.844C16.9835 119.844 0 104.24 0 81.0488C0.000160767 58.2876 16.4029 41.5392 39.6279 41.5391ZM39.6279 60.5781C31.0639 60.5782 24.5324 65.0159 24.0967 72.3164H55.1602C54.5793 65.3021 48.1921 60.5781 39.6279 60.5781ZM125.434 30.7783C117.885 28.4879 109.917 29.6208 111.224 43.0771H126.159V30.957L125.434 30.7783Z" fill="white"/>
+      </svg>
       <div class="effi-logo-sep"></div>
       <span class="effi-logo-service">PV-Rechner</span>
     </div>
 
     <!-- Progress -->
-    <div class="progress-track">
-      <div class="progress-dot active"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
+    <div class="progress-track" id="progress">
+      <div class="progress-dot active" id="pd0"></div>
+      <div class="progress-dot" id="pd1"></div>
+      <div class="progress-dot" id="pd2"></div>
+      <div class="progress-dot" id="pd3"></div>
+      <div class="progress-dot" id="pd4"></div>
+      <div class="progress-dot" id="pd5"></div>
     </div>
 
-    <!-- Header -->
-    <p class="step-eyebrow">Schritt 1 von 6</p>
-    <h1 class="step-title">Was für ein Gebäude möchtest Du ausstatten?</h1>
-    <p class="step-sub">Die Gebäudeart bestimmt Dachfläche, Ausrichtung und typischen Energiebedarf.</p>
+    <!-- ── STEP 1: Gebäudeart ── -->
+    <div class="step-panel active" id="step1">
+      <p class="step-eyebrow">Schritt 1 von 6</p>
+      <h1 class="step-title">Was für ein Gebäude möchtest Du ausstatten?</h1>
+      <p class="step-sub">Die Gebäudeart bestimmt Dachfläche, Ausrichtung und typischen Energiebedarf.</p>
 
-    <!-- Cards -->
-    <div class="cards-grid">
-
-      <div class="option-card" onclick="selectType(this,'einfamilienhaus','Einfamilienhaus','efh')" data-value="einfamilienhaus">
-        <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5Z"/><path d="M9 21V13h6v8"/></svg>
+      <div class="cards-grid">
+        <div class="option-card" onclick="s1select(this,'efh','Einfamilienhaus')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5Z"/><path d="M9 21V13h6v8"/></svg></div>
+          <div class="card-label">Einfamilienhaus</div>
+          <div class="card-sub">Freistehendes Haus, volle Dachfläche</div>
         </div>
-        <div class="card-label">Einfamilienhaus</div>
-        <div class="card-sub">Freistehendes Haus, volle Dachfläche</div>
+        <div class="option-card" onclick="s1select(this,'dhh','Doppelhaushälfte')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M1 11L7 5l6 6V20H1V11Z"/><path d="M13 11l4-4 6 6V20h-10V11Z"/><path d="M5 20v-5h3v5M15 20v-5h3v5"/></svg></div>
+          <div class="card-label">Doppelhaushälfte</div>
+          <div class="card-sub">Ca. halbe Dachfläche nutzbar</div>
+        </div>
+        <div class="option-card" onclick="s1select(this,'rh','Reihenhaus')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M1 13l3-3 3 3v7H1v-7Z"/><path d="M7 13l3-3 3 3v7H7v-7Z"/><path d="M13 12l4-4 4 4v8h-8v-8Z"/></svg></div>
+          <div class="card-label">Reihenhaus</div>
+          <div class="card-sub">Schmales Dach, eine Seite</div>
+        </div>
+        <div class="option-card" onclick="s1select(this,'other','Sonstiges')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1.5"/><path d="M2 11h20"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+          <div class="card-label">Anderes</div>
+          <div class="card-sub">Mehrfamilienhaus, Gewerbe</div>
+        </div>
       </div>
 
-      <div class="option-card" onclick="selectType(this,'doppelhaus','Doppelhaus&shy;hälfte','dhh')" data-value="doppelhaus">
-        <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M1 11L7 5l6 6V20H1V11Z"/><path d="M13 11l4-4 6 6V20h-10V11Z"/><path d="M5 20v-5h3v5M15 20v-5h3v5"/></svg>
-        </div>
-        <div class="card-label">Doppelhaushälfte</div>
-        <div class="card-sub">Ca. halbe Dachfläche nutzbar</div>
-      </div>
-
-      <div class="option-card" onclick="selectType(this,'reihenhaus','Reihenhaus','rh')" data-value="reihenhaus">
-        <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><path d="M1 13l3-3 3 3v7H1v-7Z"/><path d="M7 13l3-3 3 3v7H7v-7Z"/><path d="M13 12l4-4 4 4v8h-8v-8Z"/><path d="M3 20v-3h1v3M9 20v-3h1v3M15 20v-3h2v3"/></svg>
-        </div>
-        <div class="card-label">Reihenhaus</div>
-        <div class="card-sub">Schmales Dach, eine Seite</div>
-      </div>
-
-      <div class="option-card" onclick="selectType(this,'andere','Sonstiges','other')" data-value="andere">
-        <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1.5"/><path d="M2 11h20"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 16h4"/></svg>
-        </div>
-        <div class="card-label">Anderes</div>
-        <div class="card-sub">Mehrfamilienhaus, Gewerbe</div>
-      </div>
-
+      <button class="btn-cta" id="cta1" onclick="goStep2()">
+        Weiter <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
     </div>
 
-    <button class="btn-cta" id="cta" onclick="weiter()">
-      Weiter
-      <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-    </button>
+    <!-- ── STEP 2: Dachtyp + Ausrichtung ── -->
+    <div class="step-panel" id="step2">
+      <button class="btn-back" onclick="goStep1()">
+        <svg viewBox="0 0 16 16"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+        Zurück
+      </button>
+      <p class="step-eyebrow">Schritt 2 von 6</p>
+      <h1 class="step-title">Wie ist Dein Dach beschaffen?</h1>
+      <p class="step-sub">Dachtyp und Ausrichtung bestimmen, welche Fläche sich für PV wirklich lohnt.</p>
+
+      <!-- Dachtyp -->
+      <p style="font-size:12px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Dachtyp</p>
+      <div class="cards-grid" style="margin-bottom:1.25rem">
+        <div class="option-card" id="dc-sattel" onclick="s2dach(this,'sattel')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 12L12 4l10 8"/><path d="M4 12v8h16v-8"/></svg></div>
+          <div class="card-label">Satteldach</div>
+          <div class="card-sub">Zwei Seiten, klassisch</div>
+        </div>
+        <div class="option-card" id="dc-flach" onclick="s2dach(this,'flach')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="9" width="20" height="11" rx="1"/><line x1="2" y1="9" x2="22" y2="9"/></svg></div>
+          <div class="card-label">Flachdach</div>
+          <div class="card-sub">Frei ausrichtbar, max. Fläche</div>
+        </div>
+        <div class="option-card" id="dc-pult" onclick="s2dach(this,'pult')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 16L22 8"/><path d="M2 16v4h20V8"/></svg></div>
+          <div class="card-label">Pultdach</div>
+          <div class="card-sub">Eine Seite geneigt</div>
+        </div>
+        <div class="option-card" id="dc-walm" onclick="s2dach(this,'walm')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 4L2 10h20L12 4Z"/><path d="M4 10v10h16V10"/></svg></div>
+          <div class="card-label">Walmdach</div>
+          <div class="card-sub">Vier Seiten</div>
+        </div>
+      </div>
+
+      <!-- Ausrichtung — Kompass-Picker -->
+      <p style="font-size:12px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px" id="orient-label-title">Dachausrichtung</p>
+      <div id="orient-section">
+        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <button class="orient-btn" id="ob-s"   onclick="s2orient(this,'s')"   data-deg="0"   >S</button>
+          <button class="orient-btn" id="ob-sw"  onclick="s2orient(this,'sw')"  data-deg="45"  >SW</button>
+          <button class="orient-btn" id="ob-so"  onclick="s2orient(this,'so')"  data-deg="-45" >SO</button>
+          <button class="orient-btn" id="ob-w"   onclick="s2orient(this,'w')"   data-deg="90"  >W</button>
+          <button class="orient-btn" id="ob-o"   onclick="s2orient(this,'o')"   data-deg="-90" >O</button>
+          <button class="orient-btn" id="ob-ow"  onclick="s2orient(this,'ow')"  data-deg="0"   >O/W</button>
+          <button class="orient-btn" id="ob-n"   onclick="s2orient(this,'n')"   data-deg="180" >N</button>
+        </div>
+        <!-- Ertrag-Indicator -->
+        <div id="ertrag-bar-wrap" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px;margin-bottom:1.25rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:12px;color:rgba(255,255,255,0.45)">Solarer Ertragsfaktor</span>
+            <span style="font-size:15px;font-weight:600;color:var(--lime-300)" id="ertrag-pct">100 %</span>
+          </div>
+          <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden">
+            <div id="ertrag-bar" style="height:100%;background:var(--lime-300);border-radius:3px;width:100%;transition:width 0.4s cubic-bezier(0.4,0,0.2,1),background 0.3s"></div>
+          </div>
+          <div style="font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:6px" id="ertrag-hint">Optimale Ausrichtung für maximalen Ertrag</div>
+        </div>
+      </div>
+
+      <!-- Flachdach: kein Orientierungs-Picker nötig -->
+      <div id="flach-note" style="display:none;background:rgba(190,242,100,0.07);border:1px solid rgba(190,242,100,0.18);border-radius:8px;padding:12px 14px;margin-bottom:1.25rem;font-size:13px;color:rgba(255,255,255,0.65)">
+        Flachdächer ermöglichen freie Modulausrichtung — wir rechnen mit optimaler Südausrichtung.
+      </div>
+
+      <button class="btn-cta" id="cta2" onclick="goStep3()">
+        Weiter <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <!-- ── STEP 3: Dachfläche ── -->
+    <div class="step-panel" id="step3">
+      <button class="btn-back" onclick="goStep2()">
+        <svg viewBox="0 0 16 16"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+        Zurück
+      </button>
+      <p class="step-eyebrow">Schritt 3 von 6</p>
+      <h1 class="step-title">Wie groß ist Dein Haus?</h1>
+      <p class="step-sub">Daraus berechnen wir Deine nutzbare Dachfläche für die PV-Anlage.</p>
+
+      <div class="slider-block">
+        <div class="slider-header">
+          <span class="slider-label">Wohnfläche</span>
+          <div class="slider-val"><span id="s3-wfl-val">120</span><span>m²</span></div>
+        </div>
+        <input type="range" id="s3-wfl" min="40" max="400" step="5" value="120" oninput="s3update()">
+        <div class="slider-range"><span>40 m²</span><span>400 m²</span></div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-header">
+          <span class="slider-label">Anzahl Geschosse</span>
+          <div class="slider-val"><span id="s3-ges-val">2</span><span>OG</span></div>
+        </div>
+        <input type="range" id="s3-ges" min="1" max="4" step="1" value="2" oninput="s3update()">
+        <div class="slider-range"><span>1</span><span>4</span></div>
+      </div>
+
+      <div class="result-preview">
+        <div class="result-preview-label">Berechnete Dachfläche</div>
+        <div class="result-preview-val"><span id="s3-result">60</span><span>m²</span></div>
+        <div class="result-preview-sub" id="s3-hint">Wohnfläche ÷ Geschosse × 1,0 (Dachformfaktor)</div>
+      </div>
+
+      <button class="btn-cta enabled" id="cta3" onclick="goStep4()">
+        Weiter <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <!-- ── STEP 4: Jahresverbrauch ── -->
+    <div class="step-panel" id="step4">
+      <button class="btn-back" onclick="goStep3()">
+        <svg viewBox="0 0 16 16"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+        Zurück
+      </button>
+      <p class="step-eyebrow">Schritt 4 von 6</p>
+      <h1 class="step-title">Wie viele Personen leben im Haushalt?</h1>
+      <p class="step-sub">Der typische Jahresstromverbrauch wird anhand der Haushaltsgröße ermittelt.</p>
+
+      <div class="person-picker">
+        <span class="person-label">Personen im Haushalt</span>
+        <div class="person-controls">
+          <button class="person-btn" onclick="s4change(-1)">−</button>
+          <div class="person-count" id="s4-persons">3</div>
+          <button class="person-btn" onclick="s4change(1)">+</button>
+        </div>
+      </div>
+
+      <!-- Context cards per person count -->
+      <div style="margin-bottom:1.25rem" id="s4-context"></div>
+
+      <div class="result-preview">
+        <div class="result-preview-label">Geschätzter Jahresverbrauch</div>
+        <div class="result-preview-val"><span id="s4-result">3.500</span><span>kWh/Jahr</span></div>
+        <div class="result-preview-sub" id="s4-hint">Typisch für 3 Personen in einem Einfamilienhaus</div>
+      </div>
+
+      <button class="btn-cta enabled" id="cta4" onclick="goStep5()">
+        Weiter <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
 
   </div>
 
-  <!-- ══════════ RIGHT PANEL ══════════ -->
+  <!-- ══════ RIGHT ══════ -->
   <div class="right-panel">
 
-    <!-- Empty state -->
     <div class="right-empty" id="empty-state">
-      <svg viewBox="0 0 48 48">
-        <path d="M6 20L24 6l18 14v22a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V20Z" stroke-dasharray="4 3"/>
-        <path d="M18 42V28h12v14"/>
-      </svg>
+      <svg viewBox="0 0 48 48"><path d="M6 20L24 6l18 14v22a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V20Z" stroke-dasharray="4 3"/><path d="M18 42V28h12v14"/></svg>
       <p>Wähle Deinen Gebäudetyp<br>um die Visualisierung zu starten</p>
-      <div class="pulse-arrow" style="margin-top:4px">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5">
-          <path d="M5 12h14M13 6l6 6-6 6"/>
-        </svg>
+      <div class="pulse-arrow">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </div>
     </div>
 
-    <!-- House visualization -->
     <div class="house-viz" id="house-viz">
 
-      <div class="house-type-badge" id="house-badge">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 5L6 1l5 4v5a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 1 10V5Z"/></svg>
-        <span id="badge-label">Einfamilienhaus</span>
+      <div class="house-badge" id="house-badge">
+        <svg viewBox="0 0 12 12"><path d="M1 5L6 1l5 4v5a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 1 10V5Z"/></svg>
+        <span id="badge-text">Einfamilienhaus</span>
       </div>
 
-      <div class="house-svg-wrap">
-        <svg id="house-svg" viewBox="0 0 400 280" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <!-- Main SVG canvas -->
+      <svg id="house-svg" viewBox="0 0 400 270" width="100%">
 
-          <!-- Sky gradient bg -->
-          <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#032b1c" stop-opacity="0"/>
-              <stop offset="100%" stop-color="rgba(5,84,53,0.15)"/>
-            </linearGradient>
-          </defs>
+        <!-- Ground -->
+        <rect class="hf" x="20" y="236" width="360" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+        <line class="hp" id="gline" x1="20" y1="238" x2="380" y2="238" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
 
-          <!-- Ground -->
-          <rect class="house-fill" id="ground" x="0" y="240" width="400" height="40" rx="0" fill="rgba(255,255,255,0.04)"/>
-          <line class="house-path" id="ground-line" x1="20" y1="240" x2="380" y2="240" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-
-          <!-- Sun group -->
-          <g id="sun-group" style="opacity:0; transition: opacity 0.6s ease 1.2s;">
-            <circle cx="320" cy="58" r="18" fill="rgba(190,242,100,0.15)" stroke="#bef264" stroke-width="1.5"/>
-            <circle cx="320" cy="58" r="10" fill="rgba(190,242,100,0.35)"/>
-            <g class="sun-rays" id="sun-rays">
-              <line x1="320" y1="32" x2="320" y2="26" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="320" y1="84" x2="320" y2="90" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="294" y1="58" x2="288" y2="58" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="346" y1="58" x2="352" y2="58" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="301.6" y1="39.6" x2="297.4" y2="35.4" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="338.4" y1="76.4" x2="342.6" y2="80.6" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="338.4" y1="39.6" x2="342.6" y2="35.4" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="301.6" y1="76.4" x2="297.4" y2="80.6" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
-            </g>
+        <!-- Sun -->
+        <g id="sun-group">
+          <circle cx="322" cy="50" r="15" fill="rgba(190,242,100,0.12)" stroke="#bef264" stroke-width="1.5"/>
+          <circle cx="322" cy="50" r="7" fill="rgba(190,242,100,0.3)"/>
+          <g id="sun-rays">
+            <line class="sun-ray" x1="322" y1="28" x2="322" y2="23" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="322" y1="72" x2="322" y2="77" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="300" y1="50" x2="295" y2="50" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="344" y1="50" x2="349" y2="50" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="306" y1="34" x2="302" y2="30" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="338" y1="66" x2="342" y2="70" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="338" y1="34" x2="342" y2="30" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
+            <line class="sun-ray" x1="306" y1="66" x2="302" y2="70" stroke="#bef264" stroke-width="1.5" stroke-linecap="round"/>
           </g>
+        </g>
 
-          <!-- EFH: Einfamilienhaus (default shown) -->
-          <g id="house-efh" class="house-float">
-            <!-- Wall fill -->
-            <rect class="house-fill" x="80" y="150" width="200" height="90" fill="rgba(255,255,255,0.06)" rx="2"/>
-            <!-- Roof fill -->
-            <polygon class="house-fill" points="60,152 180,75 300,152" fill="rgba(190,242,100,0.1)"/>
-            <!-- Wall outline -->
-            <rect class="house-path" x="80" y="150" width="200" height="90" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" rx="2"/>
-            <!-- Roof outline -->
-            <polyline class="house-path" points="60,152 180,75 300,152" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-            <!-- Door -->
-            <rect class="house-fill" x="162" y="195" width="36" height="45" fill="rgba(255,255,255,0.08)" rx="2"/>
-            <rect class="house-path" x="162" y="195" width="36" height="45" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="2"/>
-            <!-- Window left -->
-            <rect class="house-fill" x="95" y="162" width="38" height="30" fill="rgba(190,242,100,0.08)" rx="2"/>
-            <rect class="house-path" x="95" y="162" width="38" height="30" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
-            <line class="house-path" x1="114" y1="162" x2="114" y2="192" stroke="rgba(255,255,255,0.2)" stroke-width="0.75"/>
-            <line class="house-path" x1="95" y1="177" x2="133" y2="177" stroke="rgba(255,255,255,0.2)" stroke-width="0.75"/>
-            <!-- Window right -->
-            <rect class="house-fill" x="227" y="162" width="38" height="30" fill="rgba(190,242,100,0.08)" rx="2"/>
-            <rect class="house-path" x="227" y="162" width="38" height="30" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
-            <line class="house-path" x1="246" y1="162" x2="246" y2="192" stroke="rgba(255,255,255,0.2)" stroke-width="0.75"/>
-            <line class="house-path" x1="227" y1="177" x2="265" y2="177" stroke="rgba(255,255,255,0.2)" stroke-width="0.75"/>
+        <!-- Energy line (house → sun) -->
+        <line id="eline" x1="200" y1="150" x2="322" y2="54" stroke="#bef264" stroke-width="0.75" stroke-dasharray="3 4" opacity="0"/>
 
-            <!-- Solar panels on roof (appear later) -->
-            <g id="panels-efh">
-              <rect class="solar-panel" x="115" y="105" width="30" height="18" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1"/>
-              <rect class="solar-panel" x="149" y="93" width="30" height="18" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.08s"/>
-              <rect class="solar-panel" x="183" y="83" width="30" height="18" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.16s"/>
-              <rect class="solar-panel" x="217" y="93" width="30" height="18" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.24s"/>
-            </g>
+        <!-- ══ HOUSE BODIES (walls only, NO roof) ══ -->
 
-            <!-- Energy flow lines (appear with panels) -->
-            <g id="energy-efh" style="opacity:0; transition: opacity 0.5s ease 1.8s;">
-              <line x1="180" y1="100" x2="320" y2="58" stroke="#bef264" stroke-width="0.75" stroke-dasharray="3 4" opacity="0.4"/>
-              <circle cx="320" cy="58" r="4" fill="#bef264" opacity="0.6"/>
-            </g>
+        <!-- EFH walls -->
+        <g id="body-efh" style="display:none" class="house-float">
+          <rect class="hf" x="82" y="148" width="196" height="90" fill="rgba(255,255,255,0.05)" rx="2"/>
+          <rect class="hp" x="82" y="148" width="196" height="90" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" rx="2"/>
+          <!-- door -->
+          <rect class="hf" x="163" y="192" width="36" height="46" fill="rgba(255,255,255,0.07)" rx="2"/>
+          <rect class="hp" x="163" y="192" width="36" height="46" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
+          <!-- win L -->
+          <rect class="hf" x="97" y="162" width="38" height="28" fill="rgba(190,242,100,0.06)" rx="2"/>
+          <rect class="hp" x="97" y="162" width="38" height="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="2"/>
+          <line class="hp" x1="116" y1="162" x2="116" y2="190" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+          <line class="hp" x1="97" y1="176" x2="135" y2="176" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+          <!-- win R -->
+          <rect class="hf" x="225" y="162" width="38" height="28" fill="rgba(190,242,100,0.06)" rx="2"/>
+          <rect class="hp" x="225" y="162" width="38" height="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="2"/>
+          <line class="hp" x1="244" y1="162" x2="244" y2="190" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+          <line class="hp" x1="225" y1="176" x2="263" y2="176" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+        </g>
+
+        <!-- DHH walls -->
+        <g id="body-dhh" style="display:none" class="house-float">
+          <rect class="hf" x="112" y="148" width="158" height="90" fill="rgba(255,255,255,0.05)" rx="2"/>
+          <rect class="hp" x="112" y="148" width="158" height="90" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" rx="2"/>
+          <line class="hp" x1="191" y1="148" x2="191" y2="238" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 3"/>
+          <rect class="hf" x="166" y="194" width="32" height="44" fill="rgba(255,255,255,0.07)" rx="2"/>
+          <rect class="hp" x="166" y="194" width="32" height="44" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
+          <rect class="hf" x="122" y="163" width="34" height="26" fill="rgba(190,242,100,0.06)" rx="2"/>
+          <rect class="hp" x="122" y="163" width="34" height="26" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="2"/>
+          <rect class="hf" x="208" y="163" width="34" height="26" fill="rgba(190,242,100,0.06)" rx="2"/>
+          <rect class="hp" x="208" y="163" width="34" height="26" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="2"/>
+        </g>
+
+        <!-- RH walls -->
+        <g id="body-rh" style="display:none" class="house-float">
+          <rect class="hf" x="50"  y="160" width="88"  height="78" fill="rgba(255,255,255,0.03)" rx="2"/>
+          <rect class="hf" x="156" y="148" width="84"  height="90" fill="rgba(255,255,255,0.06)" rx="2"/>
+          <rect class="hf" x="258" y="160" width="88"  height="78" fill="rgba(255,255,255,0.03)" rx="2"/>
+          <rect class="hp" x="50"  y="160" width="88"  height="78" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="2"/>
+          <rect class="hp" x="156" y="148" width="84"  height="90" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1.5" rx="2"/>
+          <rect class="hp" x="258" y="160" width="88"  height="78" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="2"/>
+          <rect class="hf" x="79"  y="202" width="22"  height="36" fill="rgba(255,255,255,0.06)" rx="1"/>
+          <rect class="hf" x="181" y="190" width="22"  height="48" fill="rgba(255,255,255,0.08)" rx="1"/>
+          <rect class="hf" x="281" y="202" width="22"  height="36" fill="rgba(255,255,255,0.06)" rx="1"/>
+        </g>
+
+        <!-- OTHER walls -->
+        <g id="body-other" style="display:none" class="house-float">
+          <rect class="hf" x="58"  y="126" width="284" height="112" fill="rgba(255,255,255,0.05)" rx="3"/>
+          <rect class="hp" x="58"  y="126" width="284" height="112" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" rx="3"/>
+          <line class="hp" x1="58" y1="182" x2="342" y2="182" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <rect class="hf" x="78"  y="138" width="30" height="20" fill="rgba(190,242,100,0.07)" rx="1"/>
+          <rect class="hp" x="78"  y="138" width="30" height="20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="1"/>
+          <rect class="hf" x="122" y="138" width="30" height="20" fill="rgba(190,242,100,0.07)" rx="1"/>
+          <rect class="hp" x="122" y="138" width="30" height="20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="1"/>
+          <rect class="hf" x="240" y="138" width="30" height="20" fill="rgba(190,242,100,0.07)" rx="1"/>
+          <rect class="hp" x="240" y="138" width="30" height="20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="1"/>
+          <rect class="hf" x="284" y="138" width="30" height="20" fill="rgba(190,242,100,0.07)" rx="1"/>
+          <rect class="hp" x="284" y="138" width="30" height="20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" rx="1"/>
+          <rect class="hf" x="168" y="192" width="58" height="46" fill="rgba(255,255,255,0.07)" rx="2"/>
+          <rect class="hp" x="168" y="192" width="58" height="46" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
+        </g>
+
+        <!-- ══ ROOFS (drawn in step 2) ══ -->
+
+        <!-- Satteldach — works for EFH, DHH, RH -->
+        <g id="roof-sattel-efh" style="display:none">
+          <polygon class="roof-fill" points="62,150 180,68 298,150" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="62,150 180,68 298,150" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        </g>
+        <g id="roof-sattel-dhh" style="display:none">
+          <polygon class="roof-fill" points="92,150 191,78 290,150" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="92,150 191,78 290,150" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        </g>
+        <g id="roof-sattel-rh" style="display:none">
+          <polyline class="roof-path" points="40,162 94,114 148,162" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <polyline class="roof-path" points="146,150 198,98 250,150" fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="2"/>
+          <polyline class="roof-path" points="248,162 302,114 356,162" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        </g>
+        <g id="roof-sattel-other" style="display:none">
+          <polygon class="roof-fill" points="58,126 200,60 342,126" fill="rgba(190,242,100,0.06)"/>
+          <polyline class="roof-path" points="58,126 200,60 342,126" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        </g>
+
+        <!-- Flachdach -->
+        <g id="roof-flach-efh" style="display:none">
+          <rect class="roof-fill" x="76" y="138" width="208" height="14" fill="rgba(190,242,100,0.1)" rx="2"/>
+          <rect class="roof-path" x="76" y="138" width="208" height="14" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" rx="2"/>
+        </g>
+        <g id="roof-flach-dhh" style="display:none">
+          <rect class="roof-fill" x="106" y="138" width="170" height="14" fill="rgba(190,242,100,0.1)" rx="2"/>
+          <rect class="roof-path" x="106" y="138" width="170" height="14" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" rx="2"/>
+        </g>
+        <g id="roof-flach-rh" style="display:none">
+          <rect class="roof-fill" x="44" y="150" width="312" height="12" fill="rgba(190,242,100,0.1)" rx="2"/>
+          <rect class="roof-path" x="44" y="150" width="312" height="12" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" rx="2"/>
+        </g>
+        <g id="roof-flach-other" style="display:none">
+          <rect class="roof-fill" x="52" y="114" width="296" height="14" fill="rgba(190,242,100,0.1)" rx="2"/>
+          <rect class="roof-path" x="52" y="114" width="296" height="14" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" rx="2"/>
+        </g>
+
+        <!-- Pultdach -->
+        <g id="roof-pult-efh" style="display:none">
+          <polygon class="roof-fill" points="82,148 82,88 278,128 278,148" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="82,148 82,88 278,128 278,148" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        </g>
+        <g id="roof-pult-dhh" style="display:none">
+          <polygon class="roof-fill" points="112,148 112,90 270,124 270,148" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="112,148 112,90 270,124 270,148" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        </g>
+        <g id="roof-pult-rh" style="display:none">
+          <polygon class="roof-fill" points="50,160 50,108 346,140 346,160" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="50,160 50,108 346,140 346,160" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>
+        </g>
+        <g id="roof-pult-other" style="display:none">
+          <polygon class="roof-fill" points="58,126 58,78 342,108 342,126" fill="rgba(190,242,100,0.07)"/>
+          <polyline class="roof-path" points="58,126 58,78 342,108 342,126" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        </g>
+
+        <!-- Walmdach -->
+        <g id="roof-walm-efh" style="display:none">
+          <polygon class="roof-fill" points="82,148 130,88 250,88 278,148" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="82,148 130,88 250,88 278,148" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+          <line class="roof-path" x1="130" y1="88" x2="180" y2="62" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
+          <line class="roof-path" x1="250" y1="88" x2="180" y2="62" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
+        </g>
+        <g id="roof-walm-dhh" style="display:none">
+          <polygon class="roof-fill" points="112,148 148,90 234,90 270,148" fill="rgba(190,242,100,0.08)"/>
+          <polyline class="roof-path" points="112,148 148,90 234,90 270,148" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+          <line class="roof-path" x1="148" y1="90" x2="191" y2="66" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <line class="roof-path" x1="234" y1="90" x2="191" y2="66" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        </g>
+        <g id="roof-walm-rh" style="display:none">
+          <polygon class="roof-fill" points="50,160 90,108 310,108 350,160" fill="rgba(190,242,100,0.07)"/>
+          <polyline class="roof-path" points="50,160 90,108 310,108 350,160" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>
+          <line class="roof-path" x1="90" y1="108" x2="200" y2="78" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <line class="roof-path" x1="310" y1="108" x2="200" y2="78" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </g>
+        <g id="roof-walm-other" style="display:none">
+          <polygon class="roof-fill" points="58,126 108,76 292,76 342,126" fill="rgba(190,242,100,0.06)"/>
+          <polyline class="roof-path" points="58,126 108,76 292,76 342,126" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line class="roof-path" x1="108" y1="76" x2="200" y2="52" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <line class="roof-path" x1="292" y1="76" x2="200" y2="52" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+        </g>
+
+      </svg>
+
+      <!-- Info tags -->
+      <div class="info-tags" id="info-tags">
+        <div class="info-tag" id="itag0">
+          <div class="itdot" style="background:var(--lime-300)"></div>
+          <div class="itlabel">Gebäudetyp</div>
+          <div class="itval" id="iv0">–</div>
+        </div>
+        <div class="info-tag" id="itag1">
+          <div class="itdot" style="background:rgba(255,255,255,0.3)"></div>
+          <div class="itlabel" id="il1">Typische Dachfläche</div>
+          <div class="itval" id="iv1">–</div>
+        </div>
+        <div class="info-tag" id="itag2">
+          <div class="itdot" style="background:rgba(190,242,100,0.6)"></div>
+          <div class="itlabel" id="il2">PV-Potenzial</div>
+          <div class="itval" id="iv2">–</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VIZ 2: Interaktiver Kompass + Dachplan ── -->
+    <div id="viz2" style="display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;">
+
+      <div class="house-badge" id="v2-badge" style="opacity:0;transform:translateY(-6px);transition:opacity 0.3s,transform 0.3s">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 5L6 1l5 4v5.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V5Z"/></svg>
+        <span id="v2-badge-text">Satteldach · Süd</span>
+      </div>
+
+      <!-- Compass -->
+      <div style="position:relative;width:140px;height:140px;margin-bottom:1.25rem;flex-shrink:0">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <!-- Ertrag-Sektoren (statisch, Hintergrund) -->
+          <!-- Süd = beste Zone (100%) -->
+          <path d="M70 28 A42 42 0 0 1 112 70" fill="none" stroke="rgba(190,242,100,0.55)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M70 28 A42 42 0 0 0 28 70" fill="none" stroke="rgba(190,242,100,0.55)" stroke-width="8" stroke-linecap="round"/>
+          <!-- SW/SO (85%) -->
+          <path d="M28 70 A42 42 0 0 0 70 112" fill="none" stroke="rgba(190,242,100,0.3)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M112 70 A42 42 0 0 1 70 112" fill="none" stroke="rgba(190,242,100,0.3)" stroke-width="8" stroke-linecap="round"/>
+          <!-- Ost/West (70%) -->
+          <path d="M70 112 A42 42 0 0 0 28 70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M70 112 A42 42 0 0 1 112 70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="8" stroke-linecap="round"/>
+          <!-- Nord (30%) -->
+          <path d="M28 70 A42 42 0 0 1 70 28" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M112 70 A42 42 0 0 0 70 28" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
+          <!-- Ring -->
+          <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <circle cx="70" cy="70" r="20" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.75"/>
+          <!-- Cardinal labels -->
+          <text x="70" y="11"  text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="11" font-family="Geist,sans-serif">N</text>
+          <text x="70" y="135" text-anchor="middle" fill="rgba(190,242,100,0.9)" font-size="11" font-family="Geist,sans-serif" font-weight="600">S</text>
+          <text x="7"  y="74" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="11" font-family="Geist,sans-serif">W</text>
+          <text x="133" y="74" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="11" font-family="Geist,sans-serif">O</text>
+          <!-- Needle (rotates via JS) -->
+          <g id="compass-needle" style="transform-origin:70px 70px;transform:rotate(0deg);transition:transform 0.55s cubic-bezier(0.34,1.2,0.64,1)">
+            <line x1="70" y1="70" x2="70" y2="18" stroke="var(--lime-300)" stroke-width="2.5" stroke-linecap="round"/>
+            <polygon points="70,12 66,24 74,24" fill="var(--lime-300)"/>
+            <line x1="70" y1="70" x2="70" y2="116" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="70" cy="70" r="4.5" fill="var(--green-800)" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
           </g>
-
-          <!-- DHH: Doppelhaushälfte -->
-          <g id="house-dhh" style="display:none" class="house-float">
-            <rect class="house-fill" x="120" y="150" width="160" height="90" fill="rgba(255,255,255,0.06)" rx="2"/>
-            <polygon class="house-fill" points="100,152 200,85 280,152" fill="rgba(190,242,100,0.1)"/>
-            <!-- Shared wall (dashed) -->
-            <line class="house-path" x1="200" y1="152" x2="200" y2="240" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
-            <rect class="house-path" x="120" y="150" width="160" height="90" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" rx="2"/>
-            <polyline class="house-path" points="100,152 200,85 280,152" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-            <!-- Door -->
-            <rect class="house-fill" x="174" y="197" width="30" height="43" fill="rgba(255,255,255,0.08)" rx="2"/>
-            <rect class="house-path" x="174" y="197" width="30" height="43" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="2"/>
-            <!-- Window -->
-            <rect class="house-fill" x="130" y="165" width="32" height="26" fill="rgba(190,242,100,0.08)" rx="2"/>
-            <rect class="house-path" x="130" y="165" width="32" height="26" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" rx="2"/>
-
-            <g id="panels-dhh">
-              <rect class="solar-panel" x="135" y="113" width="28" height="16" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1"/>
-              <rect class="solar-panel" x="166" y="100" width="28" height="16" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.1s"/>
-            </g>
-            <g id="energy-dhh" style="opacity:0; transition: opacity 0.5s ease 1.8s;">
-              <line x1="166" y1="108" x2="320" y2="58" stroke="#bef264" stroke-width="0.75" stroke-dasharray="3 4" opacity="0.4"/>
-            </g>
-          </g>
-
-          <!-- RH: Reihenhaus -->
-          <g id="house-rh" style="display:none" class="house-float">
-            <!-- Three units -->
-            <rect class="house-fill" x="60" y="160" width="80" height="80" fill="rgba(255,255,255,0.04)" rx="2"/>
-            <rect class="house-fill" x="160" y="148" width="80" height="92" fill="rgba(255,255,255,0.07)" rx="2"/>
-            <rect class="house-fill" x="260" y="160" width="80" height="80" fill="rgba(255,255,255,0.04)" rx="2"/>
-            <!-- Roofs -->
-            <polyline class="house-path" points="50,162 100,118 150,162" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <polyline class="house-path" points="150,150 200,100 250,150" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="2"/>
-            <polyline class="house-path" points="250,162 300,118 350,162" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <!-- Walls -->
-            <rect class="house-path" x="60" y="160" width="80" height="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-            <rect class="house-path" x="160" y="148" width="80" height="92" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-            <rect class="house-path" x="260" y="160" width="80" height="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-            <!-- Doors -->
-            <rect class="house-fill" x="88" y="205" width="22" height="35" fill="rgba(255,255,255,0.07)" rx="1"/>
-            <rect class="house-fill" x="188" y="193" width="22" height="47" fill="rgba(255,255,255,0.09)" rx="1"/>
-            <rect class="house-fill" x="288" y="205" width="22" height="35" fill="rgba(255,255,255,0.07)" rx="1"/>
-
-            <g id="panels-rh">
-              <rect class="solar-panel" x="165" y="114" width="22" height="13" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1"/>
-              <rect class="solar-panel" x="191" y="108" width="22" height="13" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.1s"/>
-              <rect class="solar-panel" x="217" y="114" width="22" height="13" fill="rgba(190,242,100,0.25)" stroke="#bef264" stroke-width="1" rx="1" style="transition-delay:0.2s"/>
-            </g>
-            <g id="energy-rh" style="opacity:0; transition: opacity 0.5s ease 1.8s;">
-              <line x1="200" y1="115" x2="320" y2="58" stroke="#bef264" stroke-width="0.75" stroke-dasharray="3 4" opacity="0.4"/>
-            </g>
-          </g>
-
-          <!-- OTHER: Flachdach -->
-          <g id="house-other" style="display:none" class="house-float">
-            <!-- Main block -->
-            <rect class="house-fill" x="70" y="130" width="260" height="110" fill="rgba(255,255,255,0.06)" rx="3"/>
-            <rect class="house-path" x="70" y="130" width="260" height="110" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" rx="3"/>
-            <!-- Flat roof edge -->
-            <rect class="house-path" x="65" y="122" width="270" height="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" rx="2"/>
-            <!-- Floors -->
-            <line class="house-path" x1="70" y1="187" x2="330" y2="187" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-            <!-- Windows grid -->
-            <rect class="house-fill" x="90" y="143" width="30" height="22" fill="rgba(190,242,100,0.08)" rx="1"/>
-            <rect class="house-path" x="90" y="143" width="30" height="22" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="1"/>
-            <rect class="house-fill" x="135" y="143" width="30" height="22" fill="rgba(190,242,100,0.08)" rx="1"/>
-            <rect class="house-path" x="135" y="143" width="30" height="22" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="1"/>
-            <rect class="house-fill" x="235" y="143" width="30" height="22" fill="rgba(190,242,100,0.08)" rx="1"/>
-            <rect class="house-path" x="235" y="143" width="30" height="22" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="1"/>
-            <rect class="house-fill" x="280" y="143" width="30" height="22" fill="rgba(190,242,100,0.08)" rx="1"/>
-            <rect class="house-path" x="280" y="143" width="30" height="22" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="1"/>
-            <!-- Door -->
-            <rect class="house-fill" x="172" y="193" width="56" height="47" fill="rgba(255,255,255,0.08)" rx="2"/>
-            <rect class="house-path" x="172" y="193" width="56" height="47" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="2"/>
-
-            <g id="panels-other">
-              <rect class="solar-panel" x="90" y="128" width="36" height="20" fill="rgba(190,242,100,0.3)" stroke="#bef264" stroke-width="1.2" rx="1" transform="rotate(-2,108,138)"/>
-              <rect class="solar-panel" x="134" y="126" width="36" height="20" fill="rgba(190,242,100,0.3)" stroke="#bef264" stroke-width="1.2" rx="1" style="transition-delay:0.08s" transform="rotate(-2,152,136)"/>
-              <rect class="solar-panel" x="178" y="124" width="36" height="20" fill="rgba(190,242,100,0.3)" stroke="#bef264" stroke-width="1.2" rx="1" style="transition-delay:0.16s" transform="rotate(-2,196,134)"/>
-              <rect class="solar-panel" x="222" y="126" width="36" height="20" fill="rgba(190,242,100,0.3)" stroke="#bef264" stroke-width="1.2" rx="1" style="transition-delay:0.24s" transform="rotate(-2,240,136)"/>
-              <rect class="solar-panel" x="266" y="128" width="36" height="20" fill="rgba(190,242,100,0.3)" stroke="#bef264" stroke-width="1.2" rx="1" style="transition-delay:0.32s" transform="rotate(-2,284,138)"/>
-            </g>
-            <g id="energy-other" style="opacity:0; transition: opacity 0.5s ease 1.8s;">
-              <line x1="200" y1="132" x2="320" y2="58" stroke="#bef264" stroke-width="0.75" stroke-dasharray="3 4" opacity="0.4"/>
-            </g>
-          </g>
-
+          <!-- Ertrag label inside -->
+          <text id="compass-pct" x="70" y="73" text-anchor="middle" fill="var(--lime-300)" font-size="11" font-family="Geist,sans-serif" font-weight="600">100 %</text>
         </svg>
       </div>
 
-      <!-- Info tags -->
-      <div class="house-info-tags" id="info-tags">
-        <div class="info-tag" id="tag-typ">
-          <div class="info-tag-dot"></div>
-          <div class="info-tag-label">Gebäudetyp</div>
-          <div class="info-tag-val" id="tag-typ-val">–</div>
+      <!-- Roof plan: top-down view with PV zones -->
+      <svg id="v2-roof-plan" viewBox="0 0 400 200" width="100%" style="margin-bottom:0.75rem">
+        <defs>
+          <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+          </pattern>
+        </defs>
+
+        <!-- EFH Satteldach top-view -->
+        <g id="rp-efh-sattel">
+          <rect x="80" y="30" width="240" height="140" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" rx="3"/>
+          <line x1="200" y1="30" x2="200" y2="170" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="3 3"/>
+          <rect id="rp-usable-L" x="80"  y="30" width="120" height="140" fill="rgba(190,242,100,0)"  rx="3" style="transition:fill 0.45s ease"/>
+          <rect id="rp-usable-R" x="200" y="30" width="120" height="140" fill="rgba(190,242,100,0)"  rx="3" style="transition:fill 0.45s ease"/>
+          <rect id="rp-hatch-L"  x="80"  y="30" width="120" height="140" fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <rect id="rp-hatch-R"  x="200" y="30" width="120" height="140" fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <text id="rp-lbl-L" x="140" y="105" text-anchor="middle" font-size="11" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">–</text>
+          <text id="rp-lbl-R" x="260" y="105" text-anchor="middle" font-size="11" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">–</text>
+          <text x="350" y="48" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N↑</text>
+          <!-- Compass mini arrow -->
+          <g id="rp-north-arrow" style="transform-origin:350px 55px">
+            <line x1="350" y1="55" x2="350" y2="38" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+          </g>
+        </g>
+
+        <!-- Flachdach -->
+        <g id="rp-flach" style="display:none">
+          <rect x="60" y="20" width="280" height="160" fill="rgba(190,242,100,0.18)" stroke="rgba(190,242,100,0.4)" stroke-width="1.5" rx="3"/>
+          <text x="200" y="105" text-anchor="middle" font-size="12" font-family="Geist,sans-serif" fill="rgba(190,242,100,0.9)" font-weight="500">100 % nutzbar</text>
+          <text x="200" y="122" text-anchor="middle" font-size="10" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">Module frei ausrichtbar (optimal: Süd)</text>
+          <text x="350" y="38" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N↑</text>
+        </g>
+
+        <!-- Pultdach -->
+        <g id="rp-pult" style="display:none">
+          <rect x="80" y="30" width="240" height="140" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" rx="3"/>
+          <rect id="rp-pult-usable" x="80" y="30" width="240" height="140" fill="rgba(190,242,100,0)"  rx="3" style="transition:fill 0.45s ease"/>
+          <rect id="rp-pult-hatch"  x="80" y="30" width="240" height="140" fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <text id="rp-pult-lbl" x="200" y="105" text-anchor="middle" font-size="11" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">Eine Seite</text>
+          <text x="350" y="48" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N↑</text>
+        </g>
+
+        <!-- Walmdach -->
+        <g id="rp-walm" style="display:none">
+          <polygon points="200,15 345,105 200,195 55,105" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <line x1="200" y1="15" x2="200" y2="195" stroke="rgba(255,255,255,0.12)" stroke-width="0.75" stroke-dasharray="3 3"/>
+          <line x1="55"  y1="105" x2="345" y2="105" stroke="rgba(255,255,255,0.12)" stroke-width="0.75" stroke-dasharray="3 3"/>
+          <polygon id="rp-walm-s" points="200,105 345,105 200,195"    fill="rgba(190,242,100,0)" style="transition:fill 0.45s ease"/>
+          <polygon id="rp-walm-n" points="200,105 55,105 200,15"      fill="rgba(190,242,100,0)" style="transition:fill 0.45s ease"/>
+          <polygon id="rp-walm-o" points="200,105 345,105 200,15"     fill="rgba(190,242,100,0)" style="transition:fill 0.45s ease"/>
+          <polygon id="rp-walm-w" points="200,105 55,105 200,195"     fill="rgba(190,242,100,0)" style="transition:fill 0.45s ease"/>
+          <polygon id="rp-walm-hs" points="200,105 345,105 200,195"   fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <polygon id="rp-walm-hn" points="200,105 55,105 200,15"     fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <polygon id="rp-walm-ho" points="200,105 345,105 200,15"    fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <polygon id="rp-walm-hw" points="200,105 55,105 200,195"    fill="url(#hatch)" opacity="0" style="transition:opacity 0.4s"/>
+          <text x="200" y="163" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">S</text>
+          <text x="200" y="50"  text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N</text>
+          <text x="315" y="109" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">O</text>
+          <text x="85"  y="109" text-anchor="middle" font-size="9" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.25)">W</text>
+        </g>
+
+        <!-- Legend -->
+        <rect x="20" y="182" width="9" height="9" fill="rgba(190,242,100,0.35)" rx="1.5"/>
+        <text x="33" y="190" font-size="10" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">PV-sinnvoll</text>
+        <rect x="110" y="182" width="9" height="9" fill="url(#hatch)" rx="1.5"/>
+        <text x="123" y="190" font-size="10" font-family="Geist,sans-serif" fill="rgba(255,255,255,0.35)">nicht lohnenswert</text>
+      </svg>
+
+      <!-- Metrics -->
+      <div class="viz-metrics" style="width:100%">
+        <div class="viz-metric"><div class="vm-label">Dachtyp</div><div class="vm-val" id="v2m-dach">–</div></div>
+        <div class="viz-metric"><div class="vm-label">Ausrichtung</div><div class="vm-val" id="v2m-orient">–</div></div>
+        <div class="viz-metric"><div class="vm-label">Nutzbarer Anteil</div><div class="vm-val lime" id="v2m-nutz">–</div></div>
+        <div class="viz-metric"><div class="vm-label">Ertragsfaktor</div><div class="vm-val" id="v2m-faktor">–</div></div>
+      </div>
+    </div>
+
+
+    <!-- ── VIZ 3: Dynamisches Haus ── -->
+    <div id="viz3" style="display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;">
+      <div class="house-badge" id="v3-badge-wrap" style="opacity:0;transform:translateY(-6px);transition:opacity 0.3s,transform 0.3s">
+        <svg viewBox="0 0 12 12"><path d="M1 5L6 1l5 4v5a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 1 10V5Z"/></svg>
+        <span id="v3-badge">Dachfläche</span>
+      </div>
+
+      <!-- Dynamic house canvas — drawn entirely via JS -->
+      <canvas id="v3-canvas" width="420" height="280" style="width:100%;height:auto;margin-bottom:10px"></canvas>
+
+      <!-- PV share bar -->
+      <div style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:12px 14px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;color:rgba(255,255,255,0.45)">PV-nutzbare Fläche</span>
+          <span style="font-size:15px;font-weight:600;color:var(--lime-300)" id="v3-pv-share-pct">50 %</span>
         </div>
-        <div class="info-tag" id="tag-dach">
-          <div class="info-tag-dot" style="background:rgba(255,255,255,0.35)"></div>
-          <div class="info-tag-label">Typische Dachfläche</div>
-          <div class="info-tag-val" id="tag-dach-val">–</div>
+        <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;display:flex;gap:2px">
+          <div id="v3-pv-bar-good" style="height:100%;background:var(--lime-300);border-radius:3px;transition:width 0.55s cubic-bezier(0.4,0,0.2,1);width:50%"></div>
+          <div id="v3-pv-bar-bad"  style="height:100%;background:rgba(255,255,255,0.1);border-radius:3px;transition:width 0.55s ease;width:48%"></div>
         </div>
-        <div class="info-tag" id="tag-kwp">
-          <div class="info-tag-dot" style="background:#bef264; opacity:0.6"></div>
-          <div class="info-tag-label">PV-Potenzial</div>
-          <div class="info-tag-val" id="tag-kwp-val">–</div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:rgba(255,255,255,0.3)">
+          <span id="v3-pv-m2-good">– m² nutzbar</span>
+          <span id="v3-pv-m2-bad">– m² nicht lohnenswert</span>
         </div>
       </div>
 
+      <div class="viz-metrics">
+        <div class="viz-metric"><div class="vm-label">Wohnfläche</div><div class="vm-val" id="vm-wfl">– <span>m²</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Geschosse</div><div class="vm-val" id="vm-ges">–</div></div>
+        <div class="viz-metric"><div class="vm-label">PV-nutzbare Fläche</div><div class="vm-val lime" id="vm-dach">– <span>m²</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Module möglich</div><div class="vm-val" id="vm-module">–</div></div>
+      </div>
+    </div>
+
+    <!-- ── VIZ 4: Jahresverbrauch ── -->
+    <div id="viz4" style="display:none;width:100%;max-width:400px;flex-direction:column;align-items:center;">
+      <div class="house-badge" id="v4-badge-wrap" style="opacity:0;transform:translateY(-6px);transition:opacity 0.3s,transform 0.3s">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="4" r="2"/><path d="M2 11c0-2.2 1.8-3.5 4-3.5s4 1.3 4 3.5"/></svg>
+        <span id="v4-badge">3 Personen</span>
+      </div>
+
+      <!-- Person avatars -->
+      <div id="v4-avatars" style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;justify-content:center;min-height:44px;align-items:center;"></div>
+
+      <!-- Bar chart SVG -->
+      <svg id="v4-chart" viewBox="0 0 400 160" width="100%">
+        <line x1="40" y1="120" x2="360" y2="120" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <!-- Bars -->
+        <rect id="bar-base" x="80" y="120" width="60" height="0" fill="rgba(255,255,255,0.15)" rx="4" style="transition:all 0.5s cubic-bezier(0.34,1.2,0.64,1)"/>
+        <rect id="bar-person" x="170" y="120" width="60" height="0" fill="rgba(190,242,100,0.3)" rx="4" style="transition:all 0.5s cubic-bezier(0.34,1.2,0.64,1) 0.1s"/>
+        <rect id="bar-total" x="260" y="120" width="60" height="0" fill="rgba(190,242,100,0.8)" rx="4" style="transition:all 0.5s cubic-bezier(0.34,1.2,0.64,1) 0.2s"/>
+        <!-- Bar labels on top -->
+        <text id="bl-base" x="110" y="120" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="11" font-family="Geist,sans-serif" opacity="0" style="transition:opacity 0.3s ease 0.5s"></text>
+        <text id="bl-person" x="200" y="120" text-anchor="middle" fill="rgba(190,242,100,0.8)" font-size="11" font-family="Geist,sans-serif" opacity="0" style="transition:opacity 0.3s ease 0.6s"></text>
+        <text id="bl-total" x="290" y="120" text-anchor="middle" fill="rgba(190,242,100,1)" font-size="12" font-family="Geist,sans-serif" font-weight="600" opacity="0" style="transition:opacity 0.3s ease 0.7s"></text>
+        <!-- X labels -->
+        <text x="110" y="136" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Geist,sans-serif">Grundbedarf</text>
+        <text x="200" y="136" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Geist,sans-serif">Personen</text>
+        <text x="290" y="136" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Geist,sans-serif">Gesamt</text>
+      </svg>
+
+      <div class="viz-metrics">
+        <div class="viz-metric"><div class="vm-label">Personen</div><div class="vm-val" id="vm4-persons">3</div></div>
+        <div class="viz-metric"><div class="vm-label">Grundbedarf</div><div class="vm-val" id="vm4-base">1.500 <span>kWh</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Jahresverbrauch</div><div class="vm-val lime" id="vm4-kwh">3.500 <span>kWh</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Ø Stromkosten/Jahr</div><div class="vm-val" id="vm4-cost">1.120 <span>€</span></div></div>
+      </div>
     </div>
 
   </div>
-
 </div>
 
 <script>
-  const typeData = {
-    efh:   { label: 'Einfamilienhaus', dach: '60 – 120 m²', kwp: 'bis 20 kWp' },
-    dhh:   { label: 'Doppelhaushälfte', dach: '30 – 60 m²',  kwp: 'bis 10 kWp' },
-    rh:    { label: 'Reihenhaus',       dach: '20 – 50 m²',  kwp: 'bis 8 kWp'  },
-    other: { label: 'Mehrfamilienhaus / Gewerbe', dach: '80 – 400 m²', kwp: 'bis 100 kWp' }
+// ── State ──
+let state = { haustyp: null, dachtyp: null, ausrichtung: null, nutzPct: 50, ertragFaktor: 1.0, wohnflaeche: 120, geschosse: 2, persons: 3 };
+
+// ── Data ──
+const hausDaten = {
+  efh:   { label:'Einfamilienhaus',           dach:'60–120 m²',  kwp:'bis 20 kWp', faktor:1.0 },
+  dhh:   { label:'Doppelhaushälfte',           dach:'30–60 m²',   kwp:'bis 10 kWp', faktor:0.55 },
+  rh:    { label:'Reihenhaus',                 dach:'20–50 m²',   kwp:'bis 8 kWp',  faktor:0.45 },
+  other: { label:'Mehrfamilienhaus / Gewerbe', dach:'80–400 m²',  kwp:'bis 100 kWp',faktor:1.1  },
+};
+const dachDaten = {
+  sattel:{ label:'Satteldach', neigung:'25–45°' },
+  flach: { label:'Flachdach',  neigung:'0–5° (aufgest.)' },
+  pult:  { label:'Pultdach',   neigung:'15–35°' },
+  walm:  { label:'Walmdach',   neigung:'30–45°' },
+};
+
+// Ausrichtungs-Ertragsfaktoren (relativ zu Süd = 100%)
+const orientDaten = {
+  s:  { label:'Süd',   deg:0,    faktor:1.00, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['s']         },
+  sw: { label:'SW',    deg:45,   faktor:0.95, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['s','w']     },
+  so: { label:'SO',    deg:-45,  faktor:0.95, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['s','o']     },
+  w:  { label:'West',  deg:90,   faktor:0.75, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['w']         },
+  o:  { label:'Ost',   deg:-90,  faktor:0.75, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['o']         },
+  ow: { label:'O/W',   deg:0,    faktor:0.82, nutzSattel:[true,true],   nutzPult:false, nutzWalm:['o','w']     },
+  n:  { label:'Nord',  deg:180,  faktor:0.50, nutzSattel:[false,false], nutzPult:false, nutzWalm:[]            },
+};
+
+// ── STEP 2 ──
+function s2dach(el, type) {
+  document.querySelectorAll('#step2 .option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.dachtyp = type;
+
+  // Flachdach: Ausrichtung irrelevant
+  document.getElementById('orient-section').style.display = type === 'flach' ? 'none' : '';
+  document.getElementById('flach-note').style.display = type === 'flach' ? '' : 'none';
+
+  if (type === 'flach') {
+    state.ausrichtung = 's';
+    state.nutzPct = 100;
+    state.ertragFaktor = 1.0;
+  }
+
+  // Animate roof in house-viz first, then switch to viz2
+  animateDach(type);
+  setTimeout(() => {
+    showViz('viz2');
+    updateViz2();
+  }, 800);
+
+  checkS2ready();
+}
+
+function s2orient(el, orient) {
+  document.querySelectorAll('.orient-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.ausrichtung = orient;
+
+  const od = orientDaten[orient];
+  const pct = Math.round(od.faktor * 100);
+  document.getElementById('ertrag-pct').textContent = pct + ' %';
+  document.getElementById('ertrag-bar').style.width = pct + '%';
+  const barColor = pct >= 90 ? 'var(--lime-300)' : pct >= 70 ? '#EF9F27' : '#E24B4A';
+  document.getElementById('ertrag-bar').style.background = barColor;
+  document.getElementById('ertrag-pct').style.color = barColor;
+  const hints = {
+    s: 'Optimale Ausrichtung — maximaler Jahresertrag',
+    sw:'Sehr gut — nur 5 % unter Optimum',
+    so:'Sehr gut — nur 5 % unter Optimum',
+    w: 'Akzeptabel — 25 % Ertragsverlust',
+    o: 'Akzeptabel — 25 % Ertragsverlust',
+    ow:'Gut für beidseitige Nutzung — Ost/West-Anlage',
+    n: 'Nicht empfehlenswert — 50 % Ertragsverlust',
   };
+  document.getElementById('ertrag-hint').textContent = hints[orient] || '';
 
-  let current = null;
+  checkS2ready();
+  showViz('viz2');
+  updateViz2();
+}
 
-  function selectType(el, label, shortLabel, type) {
-    // Card state
-    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    document.getElementById('cta').classList.add('enabled');
+function checkS2ready() {
+  const ready = state.dachtyp && (state.dachtyp === 'flach' || state.ausrichtung);
+  document.getElementById('cta2').classList.toggle('enabled', !!ready);
+}
 
-    if (current === type) return;
-    current = type;
+function updateViz2() {
+  const dt = state.dachtyp || 'sattel';
+  const or = state.ausrichtung || 's';
+  const od = orientDaten[or];
+  const faktorPct = Math.round(od.faktor * 100);
 
-    // Switch house
-    showHouse(type, label);
-  }
+  // Badge
+  const badge = document.getElementById('v2-badge');
+  document.getElementById('v2-badge-text').textContent = dachDaten[dt].label + ' · ' + od.label;
+  badge.style.opacity = '1'; badge.style.transform = 'translateY(0)';
 
-  function showHouse(type, label) {
-    const viz = document.getElementById('house-viz');
-    const empty = document.getElementById('empty-state');
+  // Compass needle + pct display
+  const deg = dt === 'flach' ? 0 : od.deg;
+  document.getElementById('compass-needle').style.transform = `rotate(${deg}deg)`;
+  const cp = document.getElementById('compass-pct');
+  if(cp) cp.textContent = faktorPct + ' %';
+  cp.style.fill = faktorPct >= 90 ? 'var(--lime-300)' : faktorPct >= 70 ? '#EF9F27' : '#E24B4A';
 
-    // Show viz, hide empty
-    empty.style.opacity = '0';
-    empty.style.pointerEvents = 'none';
-    setTimeout(() => {
-      empty.style.display = 'none';
-      viz.classList.add('visible');
-      animateHouse(type, label);
-    }, 200);
-  }
+  // Show correct roof plan
+  ['rp-efh-sattel','rp-flach','rp-pult','rp-walm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 
-  function animateHouse(type, label) {
-    // Hide all houses
-    ['efh','dhh','rh','other'].forEach(t => {
-      const el = document.getElementById('house-' + t);
-      if (el) el.style.display = 'none';
-    });
+  if (dt === 'flach') {
+    document.getElementById('rp-flach').style.display = '';
 
-    // Badge
-    const badge = document.getElementById('house-badge');
-    const badgeLabel = document.getElementById('badge-label');
-    badge.classList.remove('show');
-    badgeLabel.textContent = typeData[type].label;
-    setTimeout(() => badge.classList.add('show'), 80);
+  } else if (dt === 'sattel' || dt === 'walm') {
+    const planId = dt === 'sattel' ? 'rp-efh-sattel' : 'rp-walm';
+    document.getElementById(planId).style.display = '';
 
-    // Show house
-    const house = document.getElementById('house-' + type);
-    if (!house) return;
-    house.style.display = '';
-
-    // Reset paths
-    house.querySelectorAll('.house-path').forEach(p => {
-      p.style.transition = 'none';
-      p.classList.remove('drawn');
-    });
-    house.querySelectorAll('.house-fill').forEach(f => {
-      f.style.transition = 'none';
-      f.classList.remove('shown');
-    });
-    house.querySelectorAll('.solar-panel').forEach(p => {
-      p.classList.remove('shown');
-    });
-
-    // Ground
-    const groundLine = document.getElementById('ground-line');
-    const ground = document.getElementById('ground');
-    groundLine.style.transition = 'none';
-    groundLine.classList.remove('drawn');
-    ground.style.transition = 'none';
-    ground.classList.remove('shown');
-
-    // Sun
-    const sunGroup = document.getElementById('sun-group');
-    const sunRays = document.getElementById('sun-rays');
-    sunGroup.style.opacity = '0';
-    sunRays.classList.remove('shown');
-
-    // Energy
-    const energyEl = document.getElementById('energy-' + type);
-    if (energyEl) energyEl.style.opacity = '0';
-
-    // Hide info tags
-    document.querySelectorAll('.info-tag').forEach(t => t.classList.remove('show'));
-
-    // ── ANIMATION SEQUENCE ──
-
-    // 1. Ground (100ms)
-    setTimeout(() => {
-      ground.style.transition = 'opacity 0.4s ease';
-      ground.classList.add('shown');
-      groundLine.style.transition = 'stroke-dashoffset 0.6s ease';
-      groundLine.classList.add('drawn');
-    }, 100);
-
-    // 2. House fills (300ms)
-    setTimeout(() => {
-      house.querySelectorAll('.house-fill').forEach(f => {
-        f.style.transition = 'opacity 0.4s ease';
-        f.classList.add('shown');
-      });
-    }, 300);
-
-    // 3. House outlines (400ms, staggered)
-    const paths = Array.from(house.querySelectorAll('.house-path'));
-    paths.forEach((p, i) => {
+    if (dt === 'sattel') {
+      const useL = od.nutzSattel[0];
+      const useR = od.nutzSattel[1];
+      // Left = West side, Right = East side
+      // Determine label based on orientation
+      const lLabel = or === 'ow' ? 'Seite W' : or === 's' ? 'Seite W' : or === 'sw' ? 'Seite SW' : or === 'n' ? 'Seite N' : 'Seite W';
+      const rLabel = or === 'ow' ? 'Seite O' : or === 's' ? 'Seite O' : or === 'so' ? 'Seite SO' : or === 'n' ? 'Seite N' : 'Seite O';
       setTimeout(() => {
-        p.style.transition = 'stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1)';
-        p.classList.add('drawn');
-      }, 400 + i * 60);
-    });
+        document.getElementById('rp-usable-L').style.fill = useL ? 'rgba(190,242,100,0.3)' : 'rgba(255,255,255,0.03)';
+        document.getElementById('rp-usable-R').style.fill = useR ? 'rgba(190,242,100,0.3)' : 'rgba(255,255,255,0.03)';
+        document.getElementById('rp-hatch-L').style.opacity = useL ? '0' : '1';
+        document.getElementById('rp-hatch-R').style.opacity = useR ? '0' : '1';
+        document.getElementById('rp-lbl-L').textContent = lLabel + (useL ? ' ✓' : ' ✗');
+        document.getElementById('rp-lbl-R').textContent = rLabel + (useR ? ' ✓' : ' ✗');
+        document.getElementById('rp-lbl-L').setAttribute('fill', useL ? 'rgba(190,242,100,0.8)' : 'rgba(255,100,100,0.6)');
+        document.getElementById('rp-lbl-R').setAttribute('fill', useR ? 'rgba(190,242,100,0.8)' : 'rgba(255,100,100,0.6)');
+      }, 120);
+    } else {
+      // Walmdach
+      const nutzSeiten = od.nutzWalm;
+      ['s','n','o','w'].forEach(side => {
+        const use = nutzSeiten.includes(side);
+        setTimeout(() => {
+          document.getElementById('rp-walm-' + side).style.fill = use ? 'rgba(190,242,100,0.3)' : 'rgba(255,255,255,0.03)';
+          document.getElementById('rp-walm-h' + side).style.opacity = use ? '0' : '0.8';
+        }, 120);
+      });
+    }
 
-    // 4. Sun (900ms)
+  } else if (dt === 'pult') {
+    document.getElementById('rp-pult').style.display = '';
+    const use = od.nutzPult;
     setTimeout(() => {
-      sunGroup.style.transition = 'opacity 0.6s ease';
-      sunGroup.style.opacity = '1';
-      setTimeout(() => sunRays.classList.add('shown'), 200);
-    }, 900);
-
-    // 5. Solar panels (1100ms)
-    setTimeout(() => {
-      house.querySelectorAll('.solar-panel').forEach(p => p.classList.add('shown'));
-    }, 1100);
-
-    // 6. Energy flow (1600ms)
-    setTimeout(() => {
-      if (energyEl) energyEl.style.opacity = '1';
-    }, 1600);
-
-    // 7. Info tags (1400ms, staggered)
-    const data = typeData[type];
-    document.getElementById('tag-typ-val').textContent = data.label;
-    document.getElementById('tag-dach-val').textContent = data.dach;
-    document.getElementById('tag-kwp-val').textContent = data.kwp;
-
-    const tags = document.querySelectorAll('.info-tag');
-    tags.forEach((t, i) => {
-      setTimeout(() => t.classList.add('show'), 1400 + i * 150);
-    });
+      document.getElementById('rp-pult-usable').style.fill = use ? 'rgba(190,242,100,0.3)' : 'rgba(255,255,255,0.03)';
+      document.getElementById('rp-pult-hatch').style.opacity = use ? '0' : '1';
+      document.getElementById('rp-pult-lbl').textContent = use ? od.label + ' ✓' : od.label + ' ✗';
+      document.getElementById('rp-pult-lbl').setAttribute('fill', use ? 'rgba(190,242,100,0.8)' : 'rgba(255,100,100,0.6)');
+    }, 120);
   }
 
-  function weiter() {
-    if (!current) return;
-    console.log('Gewählt:', current);
-    // Nächster Step folgt
+  // Calc nutzbar %
+  let nutzPct = 50; // default sattel mit einer Seite
+  if (dt === 'flach') nutzPct = 100;
+  else if (dt === 'sattel') {
+    const sides = od.nutzSattel.filter(Boolean).length;
+    nutzPct = sides === 2 ? 100 : sides === 1 ? 50 : 0;
+  } else if (dt === 'pult') nutzPct = od.nutzPult ? 100 : 0;
+  else if (dt === 'walm') nutzPct = Math.round(od.nutzWalm.length / 4 * 100);
+
+  // Store for step 3 calculation
+  state.nutzPct = nutzPct;
+  state.ertragFaktor = od.faktor;
+
+  // Update metrics
+  document.getElementById('v2m-dach').textContent = dachDaten[dt].label;
+  document.getElementById('v2m-orient').textContent = dt === 'flach' ? 'Frei (Süd)' : od.label;
+  document.getElementById('v2m-nutz').textContent = nutzPct + ' %';
+  document.getElementById('v2m-faktor').textContent = faktorPct + ' %';
+}
+// Verbrauch kWh: Grundbedarf + 700 kWh pro Person (Bundesdurchschnitt EFH-angepasst)
+const GRUNDBEDARF = 1500;
+const PRO_PERSON  = 700;
+const STROMPREIS  = 0.32; // €/kWh
+
+function calcVerbrauch(p) { return GRUNDBEDARF + p * PRO_PERSON; }
+function calcDachflaeche(wfl, ges, typ) {
+  const faktor = hausDaten[typ]?.faktor || 1.0;
+  const nutzPct = state.nutzPct !== undefined ? state.nutzPct / 100 : 0.5;
+  const gesamt = Math.round((wfl / ges) * faktor);
+  const nutzbar = Math.round(gesamt * nutzPct);
+  return { gesamt, nutzbar };
+}
+
+// ── Helpers: progress ──
+function setProgress(active) {
+  for(let i=0;i<6;i++) {
+    const d = document.getElementById('pd'+i);
+    d.className = 'progress-dot' + (i < active ? ' done' : i === active ? ' active' : '');
   }
+}
+
+function showOnly(stepId) {
+  ['step1','step2','step3','step4'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id === stepId);
+  });
+}
+
+function showViz(which) {
+  ['house-viz','viz2','viz3','viz4'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = (id === which) ? 'flex' : 'none';
+  });
+  document.getElementById('empty-state').style.display = 'none';
+}
+
+// ══ STEP 1 ══
+function s1select(el, type) {
+  document.querySelectorAll('#step1 .option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('cta1').classList.add('enabled');
+  if (state.haustyp === type) return;
+  state.haustyp = type; state.dachtyp = null;
+  showAndAnimateHaus(type);
+}
+
+function showAndAnimateHaus(type) {
+  showViz('house-viz');
+  const viz = document.getElementById('house-viz');
+  viz.classList.add('visible');
+  animateHaus(type);
+}
+
+function animateHaus(type) {
+  document.querySelectorAll('[id^="body-"],[id^="roof-"]').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.hp,.hf,.roof-path,.roof-fill').forEach(el => { el.style.transition='none'; el.classList.remove('drawn','shown'); });
+  document.querySelectorAll('.sun-ray').forEach(r => r.classList.remove('shown'));
+  const sg = document.getElementById('sun-group');
+  sg.style.transition='none'; sg.classList.remove('shown');
+  const eline = document.getElementById('eline');
+  eline.style.transition='none'; eline.style.opacity='0';
+  document.querySelectorAll('.info-tag').forEach(t => t.classList.remove('show'));
+
+  const badge = document.getElementById('house-badge');
+  badge.classList.remove('show');
+  document.getElementById('badge-text').textContent = hausDaten[type].label;
+  setTimeout(() => badge.classList.add('show'), 60);
+
+  const body = document.getElementById('body-' + type);
+  body.style.display = '';
+  setTimeout(() => {
+    document.getElementById('gline').style.transition='stroke-dashoffset 0.6s ease';
+    document.getElementById('gline').classList.add('drawn');
+    body.querySelectorAll('.hf').forEach((f,i) => { f.style.transition=`opacity 0.4s ease ${i*18}ms`; f.classList.add('shown'); });
+  }, 80);
+  const paths = Array.from(body.querySelectorAll('.hp'));
+  paths.forEach((p,i) => setTimeout(() => { p.style.transition='stroke-dashoffset 0.75s cubic-bezier(0.4,0,0.2,1)'; p.classList.add('drawn'); }, 260+i*50));
+  setTimeout(() => {
+    sg.style.transition='opacity 0.55s ease'; sg.classList.add('shown');
+    document.querySelectorAll('.sun-ray').forEach((r,i) => setTimeout(() => r.classList.add('shown'), i*40));
+  }, 800);
+  const d = hausDaten[type];
+  document.getElementById('iv0').textContent = d.label;
+  document.getElementById('iv1').textContent = d.dach;
+  document.getElementById('iv2').textContent = d.kwp;
+  document.getElementById('il1').textContent = 'Typische Dachfläche';
+  document.getElementById('il2').textContent = 'PV-Potenzial';
+  [0,1,2].forEach(i => setTimeout(() => document.getElementById('itag'+i).classList.add('show'), 1050+i*120));
+}
+
+// ══ STEP 2 ══
+function s2select(el, type) {
+  document.querySelectorAll('#step2 .option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('cta2').classList.add('enabled');
+  if (state.dachtyp === type) return;
+  state.dachtyp = type;
+  animateDach(type);
+}
+
+function animateDach(type) {
+  const ht = state.haustyp || 'efh';
+  document.querySelectorAll('[id^="roof-"]').forEach(el => el.style.display='none');
+  document.querySelectorAll('.roof-path,.roof-fill').forEach(el => { el.style.transition='none'; el.classList.remove('drawn','shown'); });
+  const roofId = 'roof-'+type+'-'+ht;
+  const roof = document.getElementById(roofId);
+  if (!roof) return;
+  roof.style.display='';
+  const badge = document.getElementById('house-badge');
+  badge.classList.remove('show');
+  document.getElementById('badge-text').textContent = dachDaten[type].label;
+  setTimeout(() => badge.classList.add('show'), 60);
+  setTimeout(() => { roof.querySelectorAll('.roof-fill').forEach(f => { f.style.transition='opacity 0.45s ease'; f.classList.add('shown'); }); }, 80);
+  Array.from(roof.querySelectorAll('.roof-path')).forEach((p,i) => setTimeout(() => { p.style.transition='stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1)'; p.classList.add('drawn'); }, 150+i*60));
+  setTimeout(() => { const el=document.getElementById('eline'); el.style.transition='opacity 0.5s ease'; el.style.opacity='0.45'; }, 900);
+  document.querySelectorAll('.info-tag').forEach(t => t.classList.remove('show'));
+  const dd=dachDaten[type], hd=hausDaten[ht];
+  document.getElementById('iv0').textContent=hd.label+' · '+dd.label;
+  document.getElementById('iv1').textContent=dd.neigung;
+  document.getElementById('iv2').textContent=dd.ertrag+' Ertrag';
+  document.getElementById('il1').textContent='Neigungswinkel';
+  document.getElementById('il2').textContent='Solarer Ertrag';
+  [0,1,2].forEach(i => setTimeout(() => document.getElementById('itag'+i).classList.add('show'), 700+i*120));
+}
+
+// ══ STEP 3 ══
+function s3update() {
+  state.wohnflaeche = parseInt(document.getElementById('s3-wfl').value);
+  state.geschosse   = parseInt(document.getElementById('s3-ges').value);
+  document.getElementById('s3-wfl-val').textContent = state.wohnflaeche;
+  document.getElementById('s3-ges-val').textContent = state.geschosse;
+  const { gesamt, nutzbar } = calcDachflaeche(state.wohnflaeche, state.geschosse, state.haustyp || 'efh');
+  const nutzPct = state.nutzPct || 50;
+  const ertragPct = Math.round((state.ertragFaktor || 1) * 100);
+  document.getElementById('s3-result').textContent = nutzbar;
+  document.getElementById('s3-hint').textContent =
+    `Gesamtfläche ${gesamt} m² × ${nutzPct} % PV-sinnvoll × ${ertragPct} % Ertragsfaktor`;
+  updateViz3();
+}
+
+function updateViz3() {
+  const wfl = state.wohnflaeche;
+  const ges = state.geschosse;
+  const ht  = state.haustyp || 'efh';
+  const dt  = state.dachtyp || 'sattel';
+  const or  = state.ausrichtung || 's';
+  const od  = orientDaten[or];
+  const { gesamt, nutzbar } = calcDachflaeche(wfl, ges, ht);
+  const module   = Math.floor(nutzbar * 0.7 / 2);
+  const nutzPct  = state.nutzPct || 50;
+  const schlecht = gesamt - nutzbar;
+
+  // ── Draw dynamic house on canvas ──
+  drawHouseCanvas(wfl, ges, ht, dt, or, nutzPct);
+
+  // PV share bar
+  document.getElementById('v3-pv-share-pct').textContent = nutzPct + ' %';
+  document.getElementById('v3-pv-bar-good').style.width = nutzPct + '%';
+  document.getElementById('v3-pv-bar-bad').style.width  = Math.max(100 - nutzPct - 1, 0) + '%';
+  document.getElementById('v3-pv-m2-good').textContent = nutzbar + ' m² nutzbar';
+  document.getElementById('v3-pv-m2-bad').textContent  = schlecht > 0 ? schlecht + ' m² nicht lohnenswert' : 'volle Fläche nutzbar';
+
+  // Metrics
+  document.getElementById('vm-wfl').innerHTML    = wfl + ' <span>m²</span>';
+  document.getElementById('vm-ges').textContent  = ges;
+  document.getElementById('vm-dach').innerHTML   = nutzbar + ' <span>m²</span>';
+  document.getElementById('vm-module').textContent = module;
+
+  // Badge
+  const bw = document.getElementById('v3-badge-wrap');
+  document.getElementById('v3-badge').textContent = nutzbar + ' m² PV-Fläche';
+  bw.style.opacity='1'; bw.style.transform='translateY(0)';
+}
+
+// ── Canvas house drawing engine ──
+let v3AnimFrame = null;
+let v3DrawProgress = 0;
+let v3TargetState = null;
+
+function drawHouseCanvas(wfl, ges, ht, dt, or, nutzPct) {
+  const canvas = document.getElementById('v3-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 420, H = 280;
+
+  // Cancel any ongoing animation
+  if (v3AnimFrame) cancelAnimationFrame(v3AnimFrame);
+  v3DrawProgress = 0;
+
+  // Compute house geometry from inputs
+  // Width scales with Wohnfläche (40–400 → 120–300px)
+  const wNorm = Math.min(Math.max((wfl - 40) / 360, 0), 1);
+  const houseW = Math.round(120 + wNorm * 180); // 120–300
+  const cx = W / 2;
+
+  // Floor height: each floor = 36–48px, capped
+  const floorH = ht === 'other' ? 34 : Math.round(38 + wNorm * 10);
+  const wallH  = ges * floorH;
+
+  // Roof height
+  const roofH = dt === 'flach' ? 10 : dt === 'pult' ? Math.round(houseW * 0.22) : Math.round(houseW * 0.32);
+
+  // Ground Y
+  const groundY = H - 28;
+  const wallTop = groundY - wallH;
+  const roofTop = wallTop - roofH;
+
+  // Left/right wall edges
+  const x0 = cx - houseW / 2;
+  const x1 = cx + houseW / 2;
+
+  // Good PV sides
+  const pvSides = getPVSides(dt, or); // { left, right, top }
+
+  function animate(prog) {
+    ctx.clearRect(0, 0, W, H);
+
+    const p = Math.min(prog, 1);
+    const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+
+    // ── GROUND ──
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(20, groundY + 2);
+    ctx.lineTo(W - 20, groundY + 2);
+    ctx.stroke();
+
+    if (p < 0.05) {
+      v3AnimFrame = requestAnimationFrame(() => animate(prog + 0.025));
+      return;
+    }
+
+    const wallP   = Math.min((p - 0.05) / 0.45, 1);
+    const roofP   = Math.min((p - 0.5)  / 0.3, 1);
+    const detailP = Math.min((p - 0.75) / 0.25, 1);
+
+    // ── WALLS ──
+    const currentWallH = wallH * wallP;
+    const currentWallTop = groundY - currentWallH;
+
+    // Wall fill
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, x0, currentWallTop, houseW, currentWallH, 3);
+    ctx.fill();
+    ctx.stroke();
+
+    // Floor separator lines (animate in with wallP)
+    if (ges > 1 && wallP > 0.3) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([5, 4]);
+      for (let i = 1; i < ges; i++) {
+        const fy = groundY - (wallH / ges) * i;
+        if (fy >= currentWallTop) {
+          ctx.beginPath();
+          ctx.moveTo(x0 + 2, fy);
+          ctx.lineTo(x1 - 2, fy);
+          ctx.stroke();
+        }
+      }
+      ctx.setLineDash([]);
+    }
+
+    // ── WINDOWS & DETAILS (per floor) ──
+    if (detailP > 0) {
+      for (let floor = 0; floor < ges; floor++) {
+        const floorBottom = groundY - floor * floorH;
+        const floorTopY   = floorBottom - floorH;
+        const midY = (floorBottom + floorTopY) / 2;
+
+        // Skip bottom floor door area center
+        const isDoor = floor === 0;
+        const alpha = detailP;
+
+        // Left window
+        if (!isDoor || houseW > 160) {
+          const wx = x0 + 18 + (isDoor ? 0 : 0);
+          const wy = midY - 10;
+          const ww = Math.min(28 + wNorm * 10, 38);
+          const wh = 20;
+          ctx.fillStyle = `rgba(190,242,100,${0.07 * alpha})`;
+          ctx.strokeStyle = `rgba(255,255,255,${0.22 * alpha})`;
+          ctx.lineWidth = 1;
+          roundRect(ctx, wx, wy, ww, wh, 2);
+          ctx.fill();
+          ctx.stroke();
+          // Cross dividers
+          ctx.strokeStyle = `rgba(255,255,255,${0.12 * alpha})`;
+          ctx.lineWidth = 0.75;
+          ctx.beginPath();
+          ctx.moveTo(wx + ww/2, wy); ctx.lineTo(wx + ww/2, wy + wh);
+          ctx.moveTo(wx, wy + wh/2); ctx.lineTo(wx + ww, wy + wh/2);
+          ctx.stroke();
+        }
+
+        // Right window
+        if (!isDoor || houseW > 160) {
+          const wx = x1 - 18 - (isDoor ? 0 : 0) - (28 + wNorm * 10);
+          const wy = midY - 10;
+          const ww = Math.min(28 + wNorm * 10, 38);
+          const wh = 20;
+          ctx.fillStyle = `rgba(190,242,100,${0.07 * alpha})`;
+          ctx.strokeStyle = `rgba(255,255,255,${0.22 * alpha})`;
+          ctx.lineWidth = 1;
+          roundRect(ctx, wx, wy, ww, wh, 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.strokeStyle = `rgba(255,255,255,${0.12 * alpha})`;
+          ctx.lineWidth = 0.75;
+          ctx.beginPath();
+          ctx.moveTo(wx + ww/2, wy); ctx.lineTo(wx + ww/2, wy + wh);
+          ctx.moveTo(wx, wy + wh/2); ctx.lineTo(wx + ww, wy + wh/2);
+          ctx.stroke();
+        }
+
+        // Extra middle window for wider houses
+        if (houseW > 200 && !isDoor) {
+          const wx = cx - 14;
+          const wy = midY - 10;
+          ctx.fillStyle = `rgba(190,242,100,${0.07 * alpha})`;
+          ctx.strokeStyle = `rgba(255,255,255,${0.2 * alpha})`;
+          ctx.lineWidth = 1;
+          roundRect(ctx, wx, wy, 28, 20, 2);
+          ctx.fill(); ctx.stroke();
+        }
+
+        // Balcony on upper floors for larger houses
+        if (floor > 0 && floor < ges - 1 && houseW > 180 && detailP > 0.4) {
+          const bx = cx - 22;
+          const by = floorBottom - 4;
+          const bw = 44, bh = 8;
+          ctx.fillStyle = `rgba(255,255,255,${0.06 * alpha})`;
+          ctx.strokeStyle = `rgba(255,255,255,${0.25 * alpha})`;
+          ctx.lineWidth = 1;
+          roundRect(ctx, bx, by, bw, bh, 2);
+          ctx.fill(); ctx.stroke();
+          // Balcony railing
+          ctx.strokeStyle = `rgba(255,255,255,${0.15 * alpha})`;
+          ctx.lineWidth = 0.75;
+          for (let b = 0; b < 5; b++) {
+            ctx.beginPath();
+            ctx.moveTo(bx + 4 + b * 9, by);
+            ctx.lineTo(bx + 4 + b * 9, by + bh - 2);
+            ctx.stroke();
+          }
+        }
+
+        // Door on ground floor
+        if (isDoor) {
+          const dw = Math.min(24 + wNorm * 8, 34);
+          const dh = floorH * 0.72;
+          const dx = cx - dw / 2;
+          const dy = groundY - dh;
+          ctx.fillStyle = `rgba(255,255,255,${0.08 * alpha})`;
+          ctx.strokeStyle = `rgba(255,255,255,${0.28 * alpha})`;
+          ctx.lineWidth = 1;
+          roundRect(ctx, dx, dy, dw, dh, 2);
+          ctx.fill(); ctx.stroke();
+          // Door knob
+          ctx.fillStyle = `rgba(255,255,255,${0.4 * alpha})`;
+          ctx.beginPath();
+          ctx.arc(dx + dw - 5, dy + dh / 2, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // ── ROOF ──
+    if (roofP > 0) {
+      const rp = roofP;
+      const currentRoofH = roofH * rp;
+
+      if (dt === 'flach') {
+        // Flat roof ledge
+        ctx.fillStyle = `rgba(190,242,100,${0.12 * rp})`;
+        ctx.strokeStyle = `rgba(255,255,255,${0.5 * rp})`;
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, x0 - 6, wallTop - 10, houseW + 12, 10, 2);
+        ctx.fill(); ctx.stroke();
+
+        // PV panels on flat roof (full area)
+        if (detailP > 0.2) {
+          const panelAlpha = Math.min((detailP - 0.2) / 0.5, 1);
+          const panelW = 18, panelH = 12;
+          const gap = 5;
+          const cols = Math.floor((houseW - 20) / (panelW + gap));
+          for (let col = 0; col < cols; col++) {
+            const px = x0 + 10 + col * (panelW + gap);
+            const py = wallTop - 9;
+            ctx.fillStyle = `rgba(190,242,100,${0.3 * panelAlpha})`;
+            ctx.strokeStyle = `rgba(190,242,100,${0.7 * panelAlpha})`;
+            ctx.lineWidth = 0.75;
+            roundRect(ctx, px, py, panelW, panelH - 2, 1);
+            ctx.fill(); ctx.stroke();
+          }
+        }
+
+      } else if (dt === 'pult') {
+        // Mono-pitch roof
+        const highY = wallTop - currentRoofH;
+        const lowY  = wallTop;
+        const isPVgood = pvSides.top;
+
+        ctx.fillStyle = isPVgood ? `rgba(190,242,100,${0.12 * rp})` : `rgba(255,255,255,${0.04 * rp})`;
+        ctx.strokeStyle = isPVgood ? `rgba(255,255,255,${0.55 * rp})` : `rgba(255,255,255,${0.3 * rp})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x0 - 4, lowY);
+        ctx.lineTo(x0 - 4, highY);
+        ctx.lineTo(x1 + 4, lowY);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+
+      } else if (dt === 'walm') {
+        // Hip roof — four slopes visible from front
+        const peakX = cx;
+        const peakY = wallTop - currentRoofH;
+        const eaveOffset = Math.round(houseW * 0.18);
+
+        // All four faces
+        const faces = [
+          { pts: [[x0+eaveOffset, wallTop],[x1-eaveOffset, wallTop],[peakX, peakY]], side: 'top',   label: 'S' },
+          { pts: [[x0-4, wallTop],[x0+eaveOffset, wallTop],[peakX, peakY]],          side: 'left',  label: 'W' },
+          { pts: [[x1+4, wallTop],[x1-eaveOffset, wallTop],[peakX, peakY]],          side: 'right', label: 'O' },
+        ];
+
+        faces.forEach(face => {
+          const isGood = pvSides[face.side];
+          ctx.fillStyle = isGood ? `rgba(190,242,100,${0.18 * rp})` : `rgba(255,255,255,${0.04 * rp})`;
+          ctx.strokeStyle = isGood ? `rgba(255,255,255,${0.55 * rp})` : `rgba(255,255,255,${0.25 * rp})`;
+          ctx.lineWidth = isGood ? 1.5 : 1;
+          ctx.beginPath();
+          face.pts.forEach(([px,py], i) => i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py));
+          ctx.closePath();
+          ctx.fill(); ctx.stroke();
+        });
+
+      } else {
+        // Satteldach (gable)
+        const peakX = cx;
+        const peakY = wallTop - currentRoofH;
+
+        const leftGood  = pvSides.left;
+        const rightGood = pvSides.right;
+
+        // Left slope
+        ctx.fillStyle = leftGood ? `rgba(190,242,100,${0.14 * rp})` : `rgba(255,255,255,${0.04 * rp})`;
+        ctx.strokeStyle = leftGood ? `rgba(255,255,255,${0.55 * rp})` : `rgba(255,255,255,${0.25 * rp})`;
+        ctx.lineWidth = leftGood ? 2 : 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x0 - 4, wallTop);
+        ctx.lineTo(peakX, peakY);
+        ctx.lineTo(cx, wallTop);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+
+        // Right slope
+        ctx.fillStyle = rightGood ? `rgba(190,242,100,${0.14 * rp})` : `rgba(255,255,255,${0.04 * rp})`;
+        ctx.strokeStyle = rightGood ? `rgba(255,255,255,${0.55 * rp})` : `rgba(255,255,255,${0.25 * rp})`;
+        ctx.lineWidth = rightGood ? 2 : 1.5;
+        ctx.beginPath();
+        ctx.moveTo(cx, wallTop);
+        ctx.lineTo(peakX, peakY);
+        ctx.lineTo(x1 + 4, wallTop);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+
+        // Ridge line
+        ctx.strokeStyle = `rgba(255,255,255,${0.4 * rp})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x0 - 4, wallTop);
+        ctx.lineTo(x1 + 4, wallTop);
+        ctx.stroke();
+
+        // PV label on good side
+        if (detailP > 0.5) {
+          const labelAlpha = Math.min((detailP - 0.5) / 0.4, 1);
+          ctx.fillStyle = `rgba(190,242,100,${0.8 * labelAlpha})`;
+          ctx.font = `500 10px Geist, sans-serif`;
+          ctx.textAlign = 'center';
+          if (rightGood) {
+            ctx.fillText('PV ✓', cx + houseW/4, peakY + (wallTop - peakY) * 0.55);
+          }
+          if (leftGood) {
+            ctx.fillText('PV ✓', cx - houseW/4, peakY + (wallTop - peakY) * 0.55);
+          }
+          if (!leftGood && !rightGood) {
+            ctx.fillStyle = `rgba(255,100,100,${0.6 * labelAlpha})`;
+            ctx.fillText('nicht lohnenswert', cx, peakY + (wallTop - peakY) * 0.55);
+          }
+        }
+      }
+    }
+
+    // ── Area label ──
+    if (detailP > 0.6) {
+      const la = Math.min((detailP - 0.6) / 0.3, 1);
+      ctx.fillStyle = `rgba(190,242,100,${0.9 * la})`;
+      ctx.font = `600 12px Geist, sans-serif`;
+      ctx.textAlign = 'center';
+      const labelY = roofTop + (roofP > 0 ? (dt==='flach' ? -6 : -8) : -10);
+      // Only show if roof is drawn
+      if (roofP > 0.5) {
+        const { nutzbar: nb } = calcDachflaeche(wfl, ges, ht);
+        ctx.fillText(nb + ' m² PV-sinnvoll', cx, Math.max(labelY, 14));
+      }
+    }
+
+    // ── Wohnfläche annotation ──
+    if (detailP > 0.4) {
+      const la = Math.min((detailP - 0.4) / 0.4, 1);
+      ctx.strokeStyle = `rgba(255,255,255,${0.15 * la})`;
+      ctx.lineWidth = 0.75;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(x0, groundY + 10);
+      ctx.lineTo(x1, groundY + 10);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = `rgba(255,255,255,${0.3 * la})`;
+      ctx.font = `400 9px Geist, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(`${wfl} m² · ${ges} Geschoss${ges > 1 ? 'e' : ''}`, cx, groundY + 20);
+    }
+
+    if (p < 1) {
+      v3AnimFrame = requestAnimationFrame(() => animate(prog + 0.022));
+    }
+  }
+
+  animate(0);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function getPVSides(dt, or) {
+  if (dt === 'flach') return { left: true, right: true, top: true };
+  const sideMap = {
+    s:  { left: false, right: true,  top: true  },
+    sw: { left: true,  right: false, top: true  },
+    so: { left: false, right: true,  top: true  },
+    w:  { left: true,  right: false, top: false },
+    o:  { left: false, right: true,  top: false },
+    ow: { left: true,  right: true,  top: true  },
+    n:  { left: false, right: false, top: false },
+  };
+  return sideMap[or] || { left: false, right: true, top: true };
+}
+
+
+
+// ══ STEP 4 ══
+let s4persons = 3;
+
+function s4change(delta) {
+  s4persons = Math.max(1, Math.min(8, s4persons + delta));
+  state.persons = s4persons;
+  document.getElementById('s4-persons').textContent = s4persons;
+  s4update();
+}
+
+const personContexts = {
+  1: 'Single-Haushalt, geringe Grundlast',
+  2: 'Paar, moderate Nutzung',
+  3: 'Familie mit einem Kind, durchschnittlich',
+  4: 'Vierköpfige Familie, typisch für EFH',
+  5: 'Großfamilie, erhöhter Verbrauch',
+  6: 'Großer Haushalt, oft mit Wärmepumpe',
+  7: 'Sehr großer Haushalt',
+  8: 'Mehrgenerationenhaus',
+};
+
+function s4update() {
+  const p = s4persons;
+  const total = calcVerbrauch(p);
+  const perPerson = p * PRO_PERSON;
+  const cost = Math.round(total * STROMPREIS);
+
+  document.getElementById('s4-result').textContent = total.toLocaleString('de');
+  document.getElementById('s4-hint').textContent = personContexts[p] || '';
+  updateViz4(p, total, perPerson, cost);
+}
+
+function updateViz4(p, total, perPerson, cost) {
+  // Badge
+  const bw = document.getElementById('v4-badge-wrap');
+  document.getElementById('v4-badge').textContent = p + (p===1?' Person':' Personen');
+  bw.style.opacity='1'; bw.style.transform='translateY(0)';
+
+  // Avatars
+  const av = document.getElementById('v4-avatars');
+  av.innerHTML = '';
+  for(let i=0;i<p;i++) {
+    const div = document.createElement('div');
+    div.style.cssText = `width:36px;height:36px;border-radius:50%;background:rgba(190,242,100,${0.15+i*0.06});border:1.5px solid rgba(190,242,100,${0.3+i*0.08});display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.7);transition:opacity 0.25s ease ${i*60}ms,transform 0.25s ease ${i*60}ms`;
+    div.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(190,242,100,0.8)" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
+    av.appendChild(div);
+    setTimeout(() => { div.style.opacity='1'; div.style.transform='scale(1)'; }, 50+i*60);
+  }
+
+  // Bars (max height = 100px)
+  const maxVal = 1500 + 8 * PRO_PERSON; // max for scale
+  const scale = 95 / maxVal;
+  const hBase   = Math.round(GRUNDBEDARF * scale);
+  const hPerson = Math.round(perPerson * scale);
+  const hTotal  = Math.round(total * scale);
+
+  const barBase   = document.getElementById('bar-base');
+  const barPerson = document.getElementById('bar-person');
+  const barTotal  = document.getElementById('bar-total');
+  const blBase    = document.getElementById('bl-base');
+  const blPerson  = document.getElementById('bl-person');
+  const blTotal   = document.getElementById('bl-total');
+
+  // Reset then animate
+  [barBase,barPerson,barTotal].forEach(b => { b.setAttribute('height','0'); b.setAttribute('y','120'); });
+  [blBase,blPerson,blTotal].forEach(l => l.style.opacity='0');
+
+  setTimeout(() => {
+    barBase.setAttribute('height', hBase); barBase.setAttribute('y', 120-hBase);
+    blBase.setAttribute('y', 120-hBase-5); blBase.textContent='1.500'; blBase.style.opacity='1';
+  }, 80);
+  setTimeout(() => {
+    barPerson.setAttribute('height', hPerson); barPerson.setAttribute('y', 120-hPerson);
+    blPerson.setAttribute('y', 120-hPerson-5); blPerson.textContent=perPerson.toLocaleString('de'); blPerson.style.opacity='1';
+  }, 180);
+  setTimeout(() => {
+    barTotal.setAttribute('height', hTotal); barTotal.setAttribute('y', 120-hTotal);
+    blTotal.setAttribute('y', 120-hTotal-5); blTotal.textContent=total.toLocaleString('de')+' kWh'; blTotal.style.opacity='1';
+  }, 280);
+
+  // Metrics
+  document.getElementById('vm4-persons').textContent = p;
+  document.getElementById('vm4-base').innerHTML = '1.500 <span>kWh</span>';
+  document.getElementById('vm4-kwh').innerHTML = total.toLocaleString('de') + ' <span>kWh</span>';
+  document.getElementById('vm4-cost').innerHTML = cost.toLocaleString('de') + ' <span>€</span>';
+}
+
+// ══ NAVIGATION ══
+function goStep2() {
+  if(!state.haustyp) return;
+  showOnly('step2');
+  setProgress(1);
+  // Keep house-viz while selecting dachtyp
+  showViz('house-viz');
+  document.querySelectorAll('[id^="roof-"]').forEach(el => el.style.display='none');
+  document.getElementById('eline').style.opacity='0';
+  if(state.dachtyp) animateDach(state.dachtyp);
+  else { document.querySelectorAll('.info-tag').forEach(t=>t.classList.remove('show')); }
+  document.getElementById('cta2').classList.remove('enabled');
+  if(state.dachtyp && (state.dachtyp === 'flach' || state.ausrichtung)) {
+    document.getElementById('cta2').classList.add('enabled');
+  }
+  // Restore orient button state
+  if (state.ausrichtung) {
+    document.querySelectorAll('.orient-btn').forEach(b => b.classList.remove('selected'));
+    const ob = document.getElementById('ob-' + state.ausrichtung);
+    if (ob) ob.classList.add('selected');
+    s2orient(ob, state.ausrichtung);
+  }
+  // Flachdach toggle
+  if (state.dachtyp) {
+    document.getElementById('orient-section').style.display = state.dachtyp === 'flach' ? 'none' : '';
+    document.getElementById('flach-note').style.display = state.dachtyp === 'flach' ? '' : 'none';
+  }
+}
+
+function goStep1() {
+  showOnly('step1');
+  setProgress(0);
+  showViz('house-viz');
+  document.querySelectorAll('[id^="roof-"]').forEach(el => el.style.display='none');
+  document.getElementById('eline').style.opacity='0';
+  if(state.haustyp) {
+    const d=hausDaten[state.haustyp];
+    document.getElementById('iv0').textContent=d.label;
+    document.getElementById('iv1').textContent=d.dach;
+    document.getElementById('iv2').textContent=d.kwp;
+    document.getElementById('il1').textContent='Typische Dachfläche';
+    document.getElementById('il2').textContent='PV-Potenzial';
+    document.querySelectorAll('.info-tag').forEach(t=>t.classList.remove('show'));
+    [0,1,2].forEach(i=>setTimeout(()=>document.getElementById('itag'+i).classList.add('show'),i*80));
+  }
+  const badge=document.getElementById('house-badge');
+  badge.classList.remove('show');
+  setTimeout(()=>badge.classList.add('show'),60);
+  document.getElementById('badge-text').textContent=hausDaten[state.haustyp]?.label||'';
+}
+
+function goStep3() {
+  if(!state.dachtyp) return;
+  showOnly('step3');
+  setProgress(2);
+  showViz('viz3');
+  document.getElementById('s3-wfl').value = state.wohnflaeche;
+  document.getElementById('s3-ges').value = state.geschosse;
+  s3update();
+}
+
+function goStep4() {
+  showOnly('step4');
+  setProgress(3);
+  showViz('viz4');
+  s4persons = state.persons || 3;
+  document.getElementById('s4-persons').textContent = s4persons;
+  s4update();
+}
+
+function goStep5() {
+  // Step 5 folgt
+  console.log('Step 5 — State:', JSON.stringify(state));
+}
 </script>
 
 </body>
