@@ -124,10 +124,46 @@
     .option-card:nth-child(3){animation:fadeUp 0.4s 0.15s ease both}
     .option-card:nth-child(4){animation:fadeUp 0.4s 0.20s ease both}
 
-    /* ── ORIENT BUTTONS ── */
+    /* ── INPUTS / LEAD FORM ── */
+    .input-group { margin-bottom: 10px; }
+    .input-group label { display: block; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.45); margin-bottom: 5px; letter-spacing: 0.02em; }
+    .input-group input { width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 11px 14px; font-family: 'Geist', sans-serif; font-size: 14px; color: #fff; outline: none; transition: border-color 0.2s; }
+    .input-group input::placeholder { color: rgba(255,255,255,0.25); }
+    .input-group input:focus { border-color: rgba(190,242,100,0.5); background: rgba(190,242,100,0.05); }
+    .input-group input.error { border-color: rgba(226,75,74,0.6); }
+
+    /* ── RADIO ROWS ── */
+    .radio-row { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.09); background: rgba(255,255,255,0.04); cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.65); transition: all 0.15s; user-select: none; }
+    .radio-row:hover { border-color: rgba(190,242,100,0.3); color: #fff; }
+    .radio-row input[type=radio] { accent-color: var(--lime-300); width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; }
+    .radio-row.checked { border-color: var(--lime-300); background: rgba(190,242,100,0.1); color: #fff; }
+
+    /* ── RESULT KPI CARDS ── */
+    .result-kpi-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 1rem 1.1rem; }
+    .result-kpi-card.r-primary { border-color: rgba(190,242,100,0.25); background: rgba(190,242,100,0.07); }
+    .result-kpi-card.r-hero { border-color: rgba(190,242,100,0.35); background: rgba(190,242,100,0.1); }
+    .rkc-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; letter-spacing: 0.02em; }
+    .rkc-val { font-size: 22px; font-weight: 600; color: #fff; letter-spacing: -0.02em; margin-bottom: 2px; }
+    .rkc-val.lime { color: var(--lime-300); }
+    .rkc-sub { font-size: 11.5px; color: rgba(255,255,255,0.35); }
+
+    /* ── VIZ 5: Ersparnis Chart ── */
+    .viz5-wrap { width: 100%; max-width: 420px; }
+
+    /* ── RESULT VIZ ── */
+    .result-right { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
     .orient-btn { padding: 6px 14px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); font-family:'Geist',sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
     .orient-btn:hover { border-color: rgba(190,242,100,0.4); color: #fff; background: rgba(190,242,100,0.08); }
     .orient-btn.selected { border-color: var(--lime-300); background: rgba(190,242,100,0.15); color: var(--lime-300); }
+
+    /* Card-style orient buttons for the new dynamic layout */
+    .orient-btn-card { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 14px; border-radius: var(--radius-md); border-radius: 8px; min-width: 100px; }
+    .orient-btn-card .obc-label { font-size: 14px; font-weight: 500; }
+    .orient-btn-card .obc-sub { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+    .orient-btn-card.selected .obc-sub { color: rgba(190,242,100,0.6); }
+    .orient-warn { border-color: rgba(226,75,74,0.3) !important; color: rgba(255,150,150,0.7) !important; }
+    .orient-warn:hover { border-color: rgba(226,75,74,0.6) !important; background: rgba(226,75,74,0.08) !important; }
+    .orient-warn.selected { border-color: #E24B4A !important; background: rgba(226,75,74,0.12) !important; color: #F09595 !important; }
 
     /* ── SLIDER ── */
     .slider-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 1.25rem 1.25rem 1rem; margin-bottom: 10px; }
@@ -279,18 +315,12 @@
         </div>
       </div>
 
-      <!-- Ausrichtung — Kompass-Picker -->
+      <!-- Ausrichtung — dynamisch je Dachtyp -->
       <p style="font-size:12px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px" id="orient-label-title">Dachausrichtung</p>
       <div id="orient-section">
-        <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-          <button class="orient-btn" id="ob-s"   onclick="s2orient(this,'s')"   data-deg="0"   >S</button>
-          <button class="orient-btn" id="ob-sw"  onclick="s2orient(this,'sw')"  data-deg="45"  >SW</button>
-          <button class="orient-btn" id="ob-so"  onclick="s2orient(this,'so')"  data-deg="-45" >SO</button>
-          <button class="orient-btn" id="ob-w"   onclick="s2orient(this,'w')"   data-deg="90"  >W</button>
-          <button class="orient-btn" id="ob-o"   onclick="s2orient(this,'o')"   data-deg="-90" >O</button>
-          <button class="orient-btn" id="ob-ow"  onclick="s2orient(this,'ow')"  data-deg="0"   >O/W</button>
-          <button class="orient-btn" id="ob-n"   onclick="s2orient(this,'n')"   data-deg="180" >N</button>
-        </div>
+        <!-- Buttons werden per JS befüllt -->
+        <div id="orient-buttons" style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"></div>
+
         <!-- Ertrag-Indicator -->
         <div id="ertrag-bar-wrap" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 14px;margin-bottom:1.25rem">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -384,6 +414,220 @@
       <button class="btn-cta enabled" id="cta4" onclick="goStep5()">
         Weiter <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </button>
+    </div>
+
+    <!-- ── STEP 5: Speicher + Wallbox ── -->
+    <div class="step-panel" id="step5">
+      <button class="btn-back" onclick="goStep4()">
+        <svg viewBox="0 0 16 16"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+        Zurück
+      </button>
+      <p class="step-eyebrow">Schritt 5 von 6</p>
+      <h1 class="step-title">Planst Du Speicher oder Wallbox?</h1>
+      <p class="step-sub">Beides erhöht Deinen Eigenverbrauch und damit die Ersparnis deutlich.</p>
+
+      <p style="font-size:12px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Batteriespeicher</p>
+      <div class="cards-grid" style="margin-bottom:1.5rem">
+        <div class="option-card" id="sp-ja" onclick="s5speicher(this,'ja')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="6" y="4" width="12" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="2"/><line x1="15" y1="4" x2="15" y2="2"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+          </div>
+          <div class="card-label">Ja, mit Speicher</div>
+          <div class="card-sub">Bis zu 80 % Eigenverbrauch</div>
+        </div>
+        <div class="option-card" id="sp-nein" onclick="s5speicher(this,'nein')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M13 2L4.09 12.26c-.28.35-.42.52-.42.74 0 .5.41.91.91.91h7.42l-1 6.09 8.91-10.26c.28-.35.42-.52.42-.74 0-.5-.41-.91-.91-.91H12l1-6Z"/></svg>
+          </div>
+          <div class="card-label">Nein, ohne Speicher</div>
+          <div class="card-sub">Ca. 30 % Eigenverbrauch</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Wallbox / E-Auto</p>
+      <div class="cards-grid" style="margin-bottom:1.5rem">
+        <div class="option-card" id="wb-ja" onclick="s5wallbox(this,'ja')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1.5"/><line x1="12" y1="17.5" x2="12" y2="20"/></svg>
+          </div>
+          <div class="card-label">Ja, Wallbox geplant</div>
+          <div class="card-sub">+1.500–3.000 kWh Bedarf</div>
+        </div>
+        <div class="option-card" id="wb-nein" onclick="s5wallbox(this,'nein')">
+          <div class="card-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          </div>
+          <div class="card-label">Nein, kein E-Auto</div>
+          <div class="card-sub">Nur Haushaltsstrom</div>
+        </div>
+      </div>
+
+      <!-- Erste Ersparnis-Indikation -->
+      <div id="s5-preview" style="display:none">
+        <div class="result-preview" style="margin-bottom:1.25rem">
+          <div class="result-preview-label">Geschätzte jährliche Ersparnis</div>
+          <div class="result-preview-val" id="s5-ersparnis">–<span>€/Jahr</span></div>
+          <div class="result-preview-sub" id="s5-hint">–</div>
+        </div>
+      </div>
+
+      <button class="btn-cta" id="cta5" onclick="goStep6()">
+        Zur Auswertung <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <!-- ── STEP 6: Lead-Gate ── -->
+    <div class="step-panel" id="step6">
+      <button class="btn-back" onclick="goStep5()">
+        <svg viewBox="0 0 16 16"><path d="M13 8H3M7 4l-4 4 4 4"/></svg>
+        Zurück
+      </button>
+      <p class="step-eyebrow">Schritt 6 von 6</p>
+      <h1 class="step-title">Dein persönlicher Ergebnisbericht</h1>
+      <p class="step-sub">Erhalte Deine vollständige Analyse kostenlos — und wir vermitteln Dir geprüfte Installationsbetriebe aus Deiner Region.</p>
+
+      <!-- Teaser: was der User bekommt -->
+      <div style="background:rgba(190,242,100,0.07);border:1px solid rgba(190,242,100,0.18);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.5rem">
+        <p style="font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(190,242,100,0.6);margin-bottom:10px">Im Bericht enthalten</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#bef264" stroke-width="2"><polyline points="2,7 5.5,10.5 12,3"/></svg>
+            Vollständige Wirtschaftlichkeitsanalyse (20 Jahre)
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#bef264" stroke-width="2"><polyline points="2,7 5.5,10.5 12,3"/></svg>
+            Amortisationszeit &amp; Break-Even-Punkt
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#bef264" stroke-width="2"><polyline points="2,7 5.5,10.5 12,3"/></svg>
+            CO₂-Bilanz &amp; Klimawirkung
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#bef264" stroke-width="2"><polyline points="2,7 5.5,10.5 12,3"/></svg>
+            Förderungen in Deiner Region (KfW, Landesförderung)
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#bef264" stroke-width="2"><polyline points="2,7 5.5,10.5 12,3"/></svg>
+            3 geprüfte Angebote von Installationsbetrieben
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Vorname *</label>
+        <input type="text" id="l-name" placeholder="Dein Vorname">
+      </div>
+      <div class="input-group">
+        <label>E-Mail *</label>
+        <input type="text" id="l-email" placeholder="deine@email.de">
+      </div>
+      <div class="input-group">
+        <label>Telefon <span style="color:rgba(255,255,255,0.3);font-weight:400">(optional)</span></label>
+        <input type="text" id="l-phone" placeholder="+49 171 ...">
+      </div>
+
+      <!-- Eigentümer + Zeitplan nebeneinander -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem">
+        <div>
+          <p style="font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Eigentümer?</p>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label class="radio-row" id="rl-eigen-ja">
+              <input type="radio" name="eigentuemer" value="ja" onchange="state.eigentuemer='ja';updateRadio()">
+              <span>Ja, Eigentümer</span>
+            </label>
+            <label class="radio-row" id="rl-eigen-nein">
+              <input type="radio" name="eigentuemer" value="nein" onchange="state.eigentuemer='nein';updateRadio()">
+              <span>Nein, Mieter</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Zeitplan</p>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label class="radio-row" id="rl-zeit-jetzt">
+              <input type="radio" name="zeitplan" value="jetzt" onchange="state.zeitplan='jetzt';updateRadio()">
+              <span>So bald wie möglich</span>
+            </label>
+            <label class="radio-row" id="rl-zeit-6m">
+              <input type="radio" name="zeitplan" value="6m" onchange="state.zeitplan='6m';updateRadio()">
+              <span>In 6 Monaten</span>
+            </label>
+            <label class="radio-row" id="rl-zeit-1j">
+              <input type="radio" name="zeitplan" value="1j" onchange="state.zeitplan='1j';updateRadio()">
+              <span>In 1+ Jahren</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-cta" id="cta6" onclick="submitLead()">
+        Bericht jetzt erhalten
+        <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:10px;line-height:1.5">Deine Daten werden ausschließlich zur Vermittlung an geprüfte Installationsbetriebe genutzt. Kein Spam, jederzeit abmeldbar.</p>
+    </div>
+
+    <!-- ── ERGEBNIS ── -->
+    <div class="step-panel" id="step-result">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.75rem">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--lime-300);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#055435" stroke-width="2.5"><polyline points="2,8 6,12 14,4"/></svg>
+        </div>
+        <div>
+          <p style="font-size:15px;font-weight:500;color:#fff" id="r-name-greeting">Dein Ergebnisbericht</p>
+          <p style="font-size:12px;color:rgba(255,255,255,0.45)">Ein Partner aus Deiner Region meldet sich in Kürze</p>
+        </div>
+      </div>
+
+      <!-- KPI-Grid oben -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1.25rem" id="r-kpi-grid">
+        <div class="result-kpi-card r-primary">
+          <div class="rkc-label">Anlage</div>
+          <div class="rkc-val" id="r-kwp">– kWp</div>
+          <div class="rkc-sub" id="r-module">– Module</div>
+        </div>
+        <div class="result-kpi-card">
+          <div class="rkc-label">Jährliche Ersparnis</div>
+          <div class="rkc-val lime" id="r-ersparnis">– €</div>
+          <div class="rkc-sub">inkl. Einspeisung</div>
+        </div>
+        <div class="result-kpi-card">
+          <div class="rkc-label">Amortisation</div>
+          <div class="rkc-val" id="r-amort">– Jahre</div>
+          <div class="rkc-sub" id="r-invest">Investition ca. – €</div>
+        </div>
+        <div class="result-kpi-card">
+          <div class="rkc-label">CO₂ Einsparung</div>
+          <div class="rkc-val" id="r-co2">– t/Jahr</div>
+          <div class="rkc-sub" id="r-co2-trees">= – Bäume</div>
+        </div>
+      </div>
+
+      <!-- 20-Jahres-Gewinn -->
+      <div class="result-kpi-card r-hero" style="margin-bottom:1.25rem">
+        <div class="rkc-label">Nettogewinn über 20 Jahre</div>
+        <div class="rkc-val lime" id="r-netto20" style="font-size:26px">–</div>
+        <div class="rkc-sub" id="r-breakeven">Break-Even in Jahr –</div>
+      </div>
+
+      <!-- Speicher / Wallbox Empfehlung -->
+      <div id="r-extras" style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem"></div>
+
+      <!-- Förderung Teaser -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.25rem">
+        <p style="font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px">Mögliche Förderungen</p>
+        <div id="r-foerder" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+
+      <!-- Konfiguration-Summary -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius-lg);padding:1rem 1.25rem">
+        <p style="font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px">Deine Konfiguration</p>
+        <div id="r-config" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:rgba(255,255,255,0.5)"></div>
+      </div>
     </div>
 
   </div>
@@ -753,7 +997,7 @@
         <div class="viz-metric"><div class="vm-label">Wohnfläche</div><div class="vm-val" id="vm-wfl">– <span>m²</span></div></div>
         <div class="viz-metric"><div class="vm-label">Geschosse</div><div class="vm-val" id="vm-ges">–</div></div>
         <div class="viz-metric"><div class="vm-label">PV-nutzbare Fläche</div><div class="vm-val lime" id="vm-dach">– <span>m²</span></div></div>
-        <div class="viz-metric"><div class="vm-label">Module möglich</div><div class="vm-val" id="vm-module">–</div></div>
+        <div class="viz-metric"><div class="vm-label">PV-Potenzial</div><div class="vm-val lime" id="vm-module">–</div></div>
       </div>
     </div>
 
@@ -792,6 +1036,67 @@
       </div>
     </div>
 
+    <!-- ── VIZ 5: Speicher/Wallbox Ersparnis ── -->
+    <div id="viz5" style="display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;">
+      <div class="house-badge" id="v5-badge" style="opacity:0;transform:translateY(-6px);transition:opacity 0.3s,transform 0.3s">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 1v3M6 8v3M1 6h3M8 6h3"/><circle cx="6" cy="6" r="2"/></svg>
+        <span id="v5-badge-text">Eigenverbrauch</span>
+      </div>
+
+      <!-- Eigenverbrauch Gauge -->
+      <svg id="v5-gauge" viewBox="0 0 400 220" width="100%" style="margin-bottom:8px">
+        <!-- Gauge arc background -->
+        <path d="M60 180 A140 140 0 0 1 340 180" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="20" stroke-linecap="round"/>
+        <!-- Gauge arc fill (animated) -->
+        <path id="v5-arc" d="M60 180 A140 140 0 0 1 340 180" fill="none" stroke="rgba(190,242,100,0.3)" stroke-width="20" stroke-linecap="round" stroke-dasharray="440" stroke-dashoffset="440" style="transition:stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1),stroke 0.4s"/>
+        <!-- Center value -->
+        <text id="v5-ev-pct" x="200" y="165" text-anchor="middle" fill="var(--lime-300)" font-size="38" font-weight="600" font-family="Geist,sans-serif">–%</text>
+        <text x="200" y="186" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="12" font-family="Geist,sans-serif">Eigenverbrauch</text>
+        <!-- Labels -->
+        <text x="54" y="200" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Geist,sans-serif">0%</text>
+        <text x="346" y="200" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Geist,sans-serif">100%</text>
+      </svg>
+
+      <!-- Breakdown bars: ohne vs mit Speicher vs mit Wallbox -->
+      <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:12px" id="v5-bars"></div>
+
+      <div class="viz-metrics" style="width:100%">
+        <div class="viz-metric"><div class="vm-label">PV-Erzeugung/Jahr</div><div class="vm-val" id="v5-erzeugt">– <span>kWh</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Eigenverbrauch</div><div class="vm-val lime" id="v5-ev-kwh">– <span>kWh</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Einspeisung</div><div class="vm-val" id="v5-einsp">– <span>kWh</span></div></div>
+        <div class="viz-metric"><div class="vm-label">Jährl. Ersparnis</div><div class="vm-val lime" id="v5-ersparnis">– <span>€</span></div></div>
+      </div>
+    </div>
+
+    <!-- ── VIZ RESULT: 20-Jahres Chart ── -->
+    <div id="viz-result" style="display:none;width:100%;max-width:420px;flex-direction:column;align-items:center;">
+      <div class="house-badge" style="opacity:1;transform:none;background:var(--lime-300);color:var(--green-800)">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,9 4,5 7,7 11,2"/></svg>
+        <span id="vr-badge-text">20-Jahres Analyse</span>
+      </div>
+
+      <canvas id="vr-canvas" width="420" height="260" style="width:100%;height:auto;margin:10px 0"></canvas>
+
+      <div class="viz-metrics" style="width:100%">
+        <div class="viz-metric r-primary" style="border-color:rgba(190,242,100,0.25);background:rgba(190,242,100,0.07)">
+          <div class="vm-label">Nettogewinn 20 J.</div>
+          <div class="vm-val lime" id="vr-netto">–</div>
+        </div>
+        <div class="viz-metric">
+          <div class="vm-label">Break-Even</div>
+          <div class="vm-val" id="vr-be">– Jahre</div>
+        </div>
+        <div class="viz-metric">
+          <div class="vm-label">CO₂ gespart 20 J.</div>
+          <div class="vm-val" id="vr-co2">– t</div>
+        </div>
+        <div class="viz-metric">
+          <div class="vm-label">Ø Rendite/Jahr</div>
+          <div class="vm-val lime" id="vr-rendite">– %</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -801,10 +1106,11 @@ let state = { haustyp: null, dachtyp: null, ausrichtung: null, nutzPct: 50, ertr
 
 // ── Data ──
 const hausDaten = {
-  efh:   { label:'Einfamilienhaus',           dach:'60–120 m²',  kwp:'bis 20 kWp', faktor:1.0 },
-  dhh:   { label:'Doppelhaushälfte',           dach:'30–60 m²',   kwp:'bis 10 kWp', faktor:0.55 },
-  rh:    { label:'Reihenhaus',                 dach:'20–50 m²',   kwp:'bis 8 kWp',  faktor:0.45 },
-  other: { label:'Mehrfamilienhaus / Gewerbe', dach:'80–400 m²',  kwp:'bis 100 kWp',faktor:1.1  },
+  // Dachflächen-Faktor: Gesamtdachfläche = Grundfläche × faktor (Satteldach hat 2 Seiten, DHH eine, etc.)
+  efh:   { label:'Einfamilienhaus',           dach:'60–120 m²',  kwp:'bis 20 kWp', faktor:1.15 },
+  dhh:   { label:'Doppelhaushälfte',           dach:'30–60 m²',   kwp:'bis 12 kWp', faktor:0.60 },
+  rh:    { label:'Reihenhaus',                 dach:'20–50 m²',   kwp:'bis 8 kWp',  faktor:0.50 },
+  other: { label:'Mehrfamilienhaus / Gewerbe', dach:'80–400 m²',  kwp:'bis 100 kWp',faktor:1.20 },
 };
 const dachDaten = {
   sattel:{ label:'Satteldach', neigung:'25–45°' },
@@ -813,15 +1119,23 @@ const dachDaten = {
   walm:  { label:'Walmdach',   neigung:'30–45°' },
 };
 
-// Ausrichtungs-Ertragsfaktoren (relativ zu Süd = 100%)
+// Ausrichtungs-Ertragsfaktoren — nur sinnvolle Optionen pro Dachtyp
+// nutzPct = Anteil der Gesamtdachfläche der PV-sinnvoll ist
 const orientDaten = {
-  s:  { label:'Süd',   deg:0,    faktor:1.00, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['s']         },
-  sw: { label:'SW',    deg:45,   faktor:0.95, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['s','w']     },
-  so: { label:'SO',    deg:-45,  faktor:0.95, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['s','o']     },
-  w:  { label:'West',  deg:90,   faktor:0.75, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['w']         },
-  o:  { label:'Ost',   deg:-90,  faktor:0.75, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['o']         },
-  ow: { label:'O/W',   deg:0,    faktor:0.82, nutzSattel:[true,true],   nutzPult:false, nutzWalm:['o','w']     },
-  n:  { label:'Nord',  deg:180,  faktor:0.50, nutzSattel:[false,false], nutzPult:false, nutzWalm:[]            },
+  s:   { label:'Süd',    desc:'Optimal — max. Ertrag',       deg:0,   faktor:1.00, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['s']    },
+  ow:  { label:'Ost/West',desc:'Beide Seiten nutzbar',       deg:0,   faktor:0.82, nutzSattel:[true,true],   nutzPult:false, nutzWalm:['o','w']},
+  o:   { label:'Ost',    desc:'75 % Ertrag',                 deg:-90, faktor:0.75, nutzSattel:[false,true],  nutzPult:true,  nutzWalm:['o']    },
+  w:   { label:'West',   desc:'75 % Ertrag',                 deg:90,  faktor:0.75, nutzSattel:[true,false],  nutzPult:true,  nutzWalm:['w']    },
+  n:   { label:'Nord',   desc:'Nicht empfohlen — 50 % Ertrag',deg:180,faktor:0.50, nutzSattel:[false,false], nutzPult:false, nutzWalm:[]       },
+  best:{ label:'Beste Seite', desc:'Wird automatisch optimal ausgerichtet', deg:0, faktor:1.00, nutzSattel:[false,true], nutzPult:true, nutzWalm:['s','o','w'] },
+};
+
+// Welche Ausrichtungsoptionen je Dachtyp angezeigt werden
+const orientByDach = {
+  sattel: ['s','ow'],   // Satteldach: nur Süd oder O/W
+  flach:  [],           // Flachdach: keine Wahl nötig
+  pult:   ['s','o','w','n'], // Pultdach: alle vier Himmelsrichtungen
+  walm:   ['best'],     // Walmdach: immer beste Seite empfehlen
 };
 
 // ── STEP 2 ──
@@ -831,13 +1145,20 @@ function s2dach(el, type) {
   state.dachtyp = type;
 
   // Flachdach: Ausrichtung irrelevant
-  document.getElementById('orient-section').style.display = type === 'flach' ? 'none' : '';
-  document.getElementById('flach-note').style.display = type === 'flach' ? '' : 'none';
+  const isFlach = type === 'flach';
+  document.getElementById('orient-section').style.display = isFlach ? 'none' : '';
+  document.getElementById('flach-note').style.display = isFlach ? '' : 'none';
 
-  if (type === 'flach') {
+  if (isFlach) {
     state.ausrichtung = 's';
     state.nutzPct = 100;
     state.ertragFaktor = 1.0;
+    document.getElementById('cta2').classList.add('enabled');
+  } else {
+    // Render orientation buttons for this roof type
+    renderOrientButtons(type);
+    state.ausrichtung = null; // reset, user must pick again
+    document.getElementById('cta2').classList.remove('enabled');
   }
 
   // Animate roof in house-viz first, then switch to viz2
@@ -846,8 +1167,36 @@ function s2dach(el, type) {
     showViz('viz2');
     updateViz2();
   }, 800);
+}
 
-  checkS2ready();
+function renderOrientButtons(dachtyp) {
+  const container = document.getElementById('orient-buttons');
+  container.innerHTML = '';
+  const options = orientByDach[dachtyp] || [];
+
+  const configs = {
+    s:    { label:'Süd',     sub:'Optimal',         color:'lime'   },
+    ow:   { label:'Ost/West',sub:'Beide Seiten',     color:'lime'   },
+    o:    { label:'Ost',     sub:'75 % Ertrag',      color:'neutral'},
+    w:    { label:'West',    sub:'75 % Ertrag',      color:'neutral'},
+    n:    { label:'Nord',    sub:'Nicht empfohlen',  color:'warn'   },
+    best: { label:'Beste Seite', sub:'Automatisch optimal', color:'lime'},
+  };
+
+  options.forEach(key => {
+    const cfg = configs[key] || { label: key, sub: '', color: 'neutral' };
+    const btn = document.createElement('button');
+    btn.className = 'orient-btn orient-btn-card' + (cfg.color === 'warn' ? ' orient-warn' : '');
+    btn.dataset.orient = key;
+    btn.innerHTML = `<span class="obc-label">${cfg.label}</span><span class="obc-sub">${cfg.sub}</span>`;
+    btn.onclick = () => s2orient(btn, key);
+
+    // Auto-select if only one option (e.g. Walmdach)
+    if (options.length === 1) {
+      setTimeout(() => s2orient(btn, key), 50);
+    }
+    container.appendChild(btn);
+  });
 }
 
 function s2orient(el, orient) {
@@ -856,22 +1205,31 @@ function s2orient(el, orient) {
   state.ausrichtung = orient;
 
   const od = orientDaten[orient];
+  if (!od) return;
   const pct = Math.round(od.faktor * 100);
   document.getElementById('ertrag-pct').textContent = pct + ' %';
   document.getElementById('ertrag-bar').style.width = pct + '%';
   const barColor = pct >= 90 ? 'var(--lime-300)' : pct >= 70 ? '#EF9F27' : '#E24B4A';
   document.getElementById('ertrag-bar').style.background = barColor;
   document.getElementById('ertrag-pct').style.color = barColor;
-  const hints = {
-    s: 'Optimale Ausrichtung — maximaler Jahresertrag',
-    sw:'Sehr gut — nur 5 % unter Optimum',
-    so:'Sehr gut — nur 5 % unter Optimum',
-    w: 'Akzeptabel — 25 % Ertragsverlust',
-    o: 'Akzeptabel — 25 % Ertragsverlust',
-    ow:'Gut für beidseitige Nutzung — Ost/West-Anlage',
-    n: 'Nicht empfehlenswert — 50 % Ertragsverlust',
-  };
-  document.getElementById('ertrag-hint').textContent = hints[orient] || '';
+  document.getElementById('ertrag-hint').textContent = od.desc || '';
+
+  // Set nutzPct based on dachtyp + orient
+  const dt = state.dachtyp || 'sattel';
+  let nutzPct = 50;
+  if (dt === 'flach') {
+    nutzPct = 100;
+  } else if (dt === 'sattel') {
+    const sides = od.nutzSattel.filter(Boolean).length;
+    nutzPct = sides === 2 ? 100 : sides === 1 ? 50 : 5;
+  } else if (dt === 'pult') {
+    nutzPct = od.nutzPult ? 100 : 5;
+  } else if (dt === 'walm') {
+    // best = ~75% of walm roof is PV-usable (3 of 4 sides typically)
+    nutzPct = orient === 'best' ? 75 : Math.round(od.nutzWalm.length / 4 * 100);
+  }
+  state.nutzPct = nutzPct;
+  state.ertragFaktor = od.faktor;
 
   checkS2ready();
   showViz('viz2');
@@ -979,12 +1337,21 @@ const PRO_PERSON  = 700;
 const STROMPREIS  = 0.32; // €/kWh
 
 function calcVerbrauch(p) { return GRUNDBEDARF + p * PRO_PERSON; }
+
 function calcDachflaeche(wfl, ges, typ) {
-  const faktor = hausDaten[typ]?.faktor || 1.0;
-  const nutzPct = state.nutzPct !== undefined ? state.nutzPct / 100 : 0.5;
-  const gesamt = Math.round((wfl / ges) * faktor);
-  const nutzbar = Math.round(gesamt * nutzPct);
-  return { gesamt, nutzbar };
+  // Gesamtdachfläche: Grundfläche (wfl/ges) × Haustyp-Faktor (berücksichtigt Dachform/Anzahl Seiten)
+  const faktor  = hausDaten[typ]?.faktor || 1.0;
+  const gesamt  = Math.round((wfl / ges) * faktor);
+
+  // Nutzbar: 80% abzügl. Hindernisse (Kamin, Gauben, Abstände), dann nutzPct für PV-sinnvolle Seiten
+  const nutzPct  = (state.nutzPct !== undefined ? state.nutzPct : 50) / 100;
+  const nutzbar  = Math.round(gesamt * 0.80 * nutzPct);
+
+  // Modulanzahl: 2 m² pro Modul (420 Wp Standard), kWp = Module × 0.42
+  const module   = Math.floor(nutzbar / 2);
+  const kwp      = Math.round(module * 0.42 * 10) / 10;
+
+  return { gesamt, nutzbar, module, kwp };
 }
 
 // ── Helpers: progress ──
@@ -993,20 +1360,6 @@ function setProgress(active) {
     const d = document.getElementById('pd'+i);
     d.className = 'progress-dot' + (i < active ? ' done' : i === active ? ' active' : '');
   }
-}
-
-function showOnly(stepId) {
-  ['step1','step2','step3','step4'].forEach(id => {
-    document.getElementById(id).classList.toggle('active', id === stepId);
-  });
-}
-
-function showViz(which) {
-  ['house-viz','viz2','viz3','viz4'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.style.display = (id === which) ? 'flex' : 'none';
-  });
-  document.getElementById('empty-state').style.display = 'none';
 }
 
 // ══ STEP 1 ══
@@ -1104,12 +1457,12 @@ function s3update() {
   state.geschosse   = parseInt(document.getElementById('s3-ges').value);
   document.getElementById('s3-wfl-val').textContent = state.wohnflaeche;
   document.getElementById('s3-ges-val').textContent = state.geschosse;
-  const { gesamt, nutzbar } = calcDachflaeche(state.wohnflaeche, state.geschosse, state.haustyp || 'efh');
-  const nutzPct = state.nutzPct || 50;
+  const { gesamt, nutzbar, module, kwp } = calcDachflaeche(state.wohnflaeche, state.geschosse, state.haustyp || 'efh');
+  const nutzPct  = state.nutzPct || 50;
   const ertragPct = Math.round((state.ertragFaktor || 1) * 100);
   document.getElementById('s3-result').textContent = nutzbar;
   document.getElementById('s3-hint').textContent =
-    `Gesamtfläche ${gesamt} m² × ${nutzPct} % PV-sinnvoll × ${ertragPct} % Ertragsfaktor`;
+    `${gesamt} m² Dach × 80 % nutzbar × ${nutzPct} % PV-sinnvoll → ${module} Module → ${kwp} kWp`;
   updateViz3();
 }
 
@@ -1119,11 +1472,10 @@ function updateViz3() {
   const ht  = state.haustyp || 'efh';
   const dt  = state.dachtyp || 'sattel';
   const or  = state.ausrichtung || 's';
-  const od  = orientDaten[or];
-  const { gesamt, nutzbar } = calcDachflaeche(wfl, ges, ht);
-  const module   = Math.floor(nutzbar * 0.7 / 2);
+  const od  = orientDaten[or] || orientDaten['s'];
+  const { gesamt, nutzbar, module, kwp } = calcDachflaeche(wfl, ges, ht);
   const nutzPct  = state.nutzPct || 50;
-  const schlecht = gesamt - nutzbar;
+  const schlecht = Math.round(gesamt * 0.8) - nutzbar;
 
   // ── Draw dynamic house on canvas ──
   drawHouseCanvas(wfl, ges, ht, dt, or, nutzPct);
@@ -1132,18 +1484,18 @@ function updateViz3() {
   document.getElementById('v3-pv-share-pct').textContent = nutzPct + ' %';
   document.getElementById('v3-pv-bar-good').style.width = nutzPct + '%';
   document.getElementById('v3-pv-bar-bad').style.width  = Math.max(100 - nutzPct - 1, 0) + '%';
-  document.getElementById('v3-pv-m2-good').textContent = nutzbar + ' m² nutzbar';
+  document.getElementById('v3-pv-m2-good').textContent = nutzbar + ' m² PV-sinnvoll';
   document.getElementById('v3-pv-m2-bad').textContent  = schlecht > 0 ? schlecht + ' m² nicht lohnenswert' : 'volle Fläche nutzbar';
 
-  // Metrics
+  // Metrics — now show kWp instead of module count
   document.getElementById('vm-wfl').innerHTML    = wfl + ' <span>m²</span>';
   document.getElementById('vm-ges').textContent  = ges;
   document.getElementById('vm-dach').innerHTML   = nutzbar + ' <span>m²</span>';
-  document.getElementById('vm-module').textContent = module;
+  document.getElementById('vm-module').textContent = kwp + ' kWp';
 
   // Badge
   const bw = document.getElementById('v3-badge-wrap');
-  document.getElementById('v3-badge').textContent = nutzbar + ' m² PV-Fläche';
+  document.getElementById('v3-badge').textContent = kwp + ' kWp möglich · ' + module + ' Module';
   bw.style.opacity='1'; bw.style.transform='translateY(0)';
 }
 
@@ -1643,11 +1995,14 @@ function goStep2() {
     document.getElementById('cta2').classList.add('enabled');
   }
   // Restore orient button state
-  if (state.ausrichtung) {
-    document.querySelectorAll('.orient-btn').forEach(b => b.classList.remove('selected'));
-    const ob = document.getElementById('ob-' + state.ausrichtung);
-    if (ob) ob.classList.add('selected');
-    s2orient(ob, state.ausrichtung);
+  if (state.dachtyp && state.dachtyp !== 'flach') {
+    renderOrientButtons(state.dachtyp);
+    if (state.ausrichtung) {
+      setTimeout(() => {
+        const btn = document.querySelector(`[data-orient="${state.ausrichtung}"]`);
+        if (btn) s2orient(btn, state.ausrichtung);
+      }, 60);
+    }
   }
   // Flachdach toggle
   if (state.dachtyp) {
@@ -1698,8 +2053,396 @@ function goStep4() {
 }
 
 function goStep5() {
-  // Step 5 folgt
-  console.log('Step 5 — State:', JSON.stringify(state));
+  showOnly('step5');
+  setProgress(4);
+  showViz('viz5');
+  // Reset selections visually
+  ['sp-ja','sp-nein','wb-ja','wb-nein'].forEach(id => document.getElementById(id)?.classList.remove('selected'));
+  if (state.speicher) document.getElementById('sp-' + state.speicher)?.classList.add('selected');
+  if (state.wallbox)  document.getElementById('wb-' + state.wallbox)?.classList.add('selected');
+  updateViz5();
+}
+
+// ── Berechnung Kern ──────────────────────────────────────────────
+function calcPV() {
+  const { gesamt, nutzbar, module, kwp } = calcDachflaeche(state.wohnflaeche, state.geschosse, state.haustyp || 'efh');
+  const ertrag    = state.ertragFaktor || 1.0;
+  // PV Jahreserzeugung: ~950 kWh/kWp (Bundesdurchschnitt Norddeutschland)
+  const erzeugt   = Math.round(kwp * 950 * ertrag);
+  const verbrauch = calcVerbrauch(state.persons || 3) + (state.wallbox === 'ja' ? 2000 : 0);
+
+  // Eigenverbrauchsquote
+  const evBasis   = state.speicher === 'ja' ? 0.80 : 0.30;
+  const evKwh     = Math.round(Math.min(erzeugt * evBasis, verbrauch));
+  const einspKwh  = erzeugt - evKwh;
+
+  // Ersparnisse
+  const erspaart  = Math.round(evKwh * STROMPREIS);                    // Bezug vermieden
+  const einspEuro = Math.round(einspKwh * 0.082);                       // Einspeisevergütung ~8,2 ct/kWh
+  const ersparnis = erspaart + einspEuro;
+
+  // Investition (Richtwert: 1.400 €/kWp + optional Speicher/Wallbox)
+  let invest = Math.round(kwp * 1400);
+  if (state.speicher === 'ja') invest += Math.round(kwp * 400 + 2000); // Speicher ~kwp*400 + 2k Grundkosten
+  if (state.wallbox  === 'ja') invest += 1500;
+
+  // 20-Jahres-Rechnung (1% Degradation/Jahr, 4% Strompreissteigerung/Jahr)
+  let kumulativ = 0, breakEvenJahr = 0;
+  const yearly = [];
+  for (let y = 1; y <= 20; y++) {
+    const deg    = Math.pow(0.99, y);
+    const preis  = STROMPREIS * Math.pow(1.04, y);
+    const ev     = Math.round(evKwh * deg);
+    const einsp  = Math.round(einspKwh * deg);
+    const ertragJ = Math.round(ev * preis + einsp * 0.082);
+    kumulativ += ertragJ;
+    yearly.push({ y, ertragJ, kumulativ });
+    if (!breakEvenJahr && kumulativ >= invest) breakEvenJahr = y;
+  }
+  const netto20 = kumulativ - invest;
+  const rendite = Math.round((netto20 / invest / 20) * 100);
+
+  // CO₂: 0.38 kg/kWh (DE Strommix 2024)
+  const co2Jahr = Math.round(erzeugt * 0.38) / 1000;
+  const co2_20  = Math.round(co2Jahr * 20 * 10) / 10;
+
+  return { kwp, module, erzeugt, verbrauch, evKwh, einspKwh, ersparnis, invest, netto20, breakEvenJahr, rendite, co2Jahr, co2_20, yearly, evPct: Math.round(evKwh / erzeugt * 100) };
+}
+
+// ── STEP 5 Logik ────────────────────────────────────────────────
+function s5speicher(el, val) {
+  document.querySelectorAll('#step5 #sp-ja,#step5 #sp-nein').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.speicher = val;
+  checkS5ready();
+  updateS5preview();
+  updateViz5();
+}
+
+function s5wallbox(el, val) {
+  document.querySelectorAll('#step5 #wb-ja,#step5 #wb-nein').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.wallbox = val;
+  checkS5ready();
+  updateS5preview();
+  updateViz5();
+}
+
+function checkS5ready() {
+  const ready = state.speicher && state.wallbox;
+  document.getElementById('cta5').classList.toggle('enabled', !!ready);
+}
+
+function updateS5preview() {
+  if (!state.speicher || !state.wallbox) return;
+  const { ersparnis } = calcPV();
+  document.getElementById('s5-preview').style.display = '';
+  document.getElementById('s5-ersparnis').innerHTML = ersparnis.toLocaleString('de') + '<span>€/Jahr</span>';
+  const ev = state.speicher === 'ja' ? 80 : 30;
+  const wb = state.wallbox  === 'ja' ? ' inkl. E-Auto-Laden' : '';
+  document.getElementById('s5-hint').textContent = `${ev} % Eigenverbrauch${wb} — Basis für Deinen Ergebnisbericht`;
+}
+
+function updateViz5() {
+  if (!state.speicher || !state.wallbox) {
+    // Show empty gauge
+    document.getElementById('v5-ev-pct').textContent = '–';
+    document.getElementById('v5-arc').style.strokeDashoffset = '440';
+    document.getElementById('v5-bars').innerHTML = '';
+    return;
+  }
+  const pv = calcPV();
+
+  // Badge
+  const bw = document.getElementById('v5-badge');
+  document.getElementById('v5-badge-text').textContent = pv.evPct + ' % Eigenverbrauch';
+  bw.style.opacity = '1'; bw.style.transform = 'translateY(0)';
+
+  // Gauge: arc length 440px total (semicircle ~440)
+  const arcFill = Math.round((pv.evPct / 100) * 440);
+  const arcColor = pv.evPct >= 70 ? 'rgba(190,242,100,0.9)' : pv.evPct >= 40 ? '#EF9F27' : 'rgba(255,255,255,0.5)';
+  const arc = document.getElementById('v5-arc');
+  arc.style.stroke = arcColor;
+  setTimeout(() => { arc.style.strokeDashoffset = (440 - arcFill).toString(); }, 80);
+  document.getElementById('v5-ev-pct').textContent = pv.evPct + '%';
+  document.getElementById('v5-ev-pct').setAttribute('fill', arcColor);
+
+  // Breakdown bars
+  const bars = document.getElementById('v5-bars');
+  bars.innerHTML = '';
+  const items = [
+    { label: 'Eigenverbrauch',       val: pv.evKwh,    pct: Math.round(pv.evKwh / pv.erzeugt * 100),   color: 'var(--lime-300)' },
+    { label: 'Einspeisung ins Netz', val: pv.einspKwh, pct: Math.round(pv.einspKwh / pv.erzeugt * 100), color: 'rgba(255,255,255,0.25)' },
+  ];
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:column;gap:4px;opacity:0;transform:translateX(10px);transition:opacity 0.35s ease,transform 0.35s ease';
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:11.5px">
+        <span style="color:rgba(255,255,255,0.5)">${item.label}</span>
+        <span style="color:rgba(255,255,255,0.75);font-weight:500">${item.val.toLocaleString('de')} kWh (${item.pct}%)</span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden">
+        <div style="height:100%;background:${item.color};border-radius:3px;width:0;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)" data-w="${item.pct}%"></div>
+      </div>`;
+    bars.appendChild(row);
+    setTimeout(() => {
+      row.style.opacity = '1'; row.style.transform = 'translateX(0)';
+      row.querySelector('[data-w]').style.width = row.querySelector('[data-w]').dataset.w;
+    }, 100 + items.indexOf(item) * 100);
+  });
+
+  // Metrics
+  document.getElementById('v5-erzeugt').innerHTML = pv.erzeugt.toLocaleString('de') + ' <span>kWh</span>';
+  document.getElementById('v5-ev-kwh').innerHTML  = pv.evKwh.toLocaleString('de') + ' <span>kWh</span>';
+  document.getElementById('v5-einsp').innerHTML   = pv.einspKwh.toLocaleString('de') + ' <span>kWh</span>';
+  document.getElementById('v5-ersparnis').innerHTML = pv.ersparnis.toLocaleString('de') + ' <span>€</span>';
+}
+
+// ── STEP 6 / Lead ────────────────────────────────────────────────
+function goStep6() {
+  if (!state.speicher || !state.wallbox) return;
+  showOnly('step6');
+  setProgress(5);
+  showViz('viz5');
+  updateRadio();
+  checkLeadReady();
+  initLeadValidation();
+}
+
+function updateRadio() {
+  // Highlight selected radio rows
+  document.querySelectorAll('.radio-row').forEach(r => {
+    const inp = r.querySelector('input[type=radio]');
+    r.classList.toggle('checked', inp && inp.checked);
+  });
+  checkLeadReady();
+}
+
+function checkLeadReady() {
+  const name  = document.getElementById('l-name')?.value.trim();
+  const email = document.getElementById('l-email')?.value.trim();
+  const ready = name && email && email.includes('@') && state.eigentuemer && state.zeitplan;
+  document.getElementById('cta6')?.classList.toggle('enabled', !!ready);
+}
+
+// Live validation on input
+function initLeadValidation() {
+  ['l-name','l-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => { el.classList.remove('error'); checkLeadReady(); });
+    }
+  });
+}
+
+function submitLead() {
+  const name  = document.getElementById('l-name').value.trim();
+  const email = document.getElementById('l-email').value.trim();
+  if (!name || !email || !email.includes('@')) {
+    if (!name)  document.getElementById('l-name').classList.add('error');
+    if (!email || !email.includes('@')) document.getElementById('l-email').classList.add('error');
+    return;
+  }
+  state.leadName  = name;
+  state.leadEmail = email;
+  state.leadPhone = document.getElementById('l-phone').value.trim();
+  showResults();
+}
+
+// ── ERGEBNISSEITE ────────────────────────────────────────────────
+function showResults() {
+  showOnly('step-result');
+  setProgress(6);
+  showViz('viz-result');
+
+  const pv = calcPV();
+  const name = state.leadName || '';
+
+  // Greeting
+  document.getElementById('r-name-greeting').textContent =
+    name ? `${name}, hier ist Deine Analyse` : 'Deine persönliche Analyse';
+
+  // KPI cards
+  document.getElementById('r-kwp').textContent    = pv.kwp + ' kWp';
+  document.getElementById('r-module').textContent = pv.module + ' Module · ' + Math.round(pv.kwp * 950 * (state.ertragFaktor||1)).toLocaleString('de') + ' kWh/Jahr';
+  document.getElementById('r-ersparnis').textContent = pv.ersparnis.toLocaleString('de') + ' €';
+  document.getElementById('r-amort').textContent   = pv.breakEvenJahr ? pv.breakEvenJahr + ' Jahre' : '> 20 J.';
+  document.getElementById('r-invest').textContent  = 'Investition ca. ' + pv.invest.toLocaleString('de') + ' €';
+  document.getElementById('r-co2').textContent     = pv.co2Jahr.toFixed(1) + ' t/Jahr';
+  document.getElementById('r-co2-trees').textContent = '= ' + Math.round(pv.co2Jahr * 50) + ' Bäume/Jahr';
+  document.getElementById('r-netto20').textContent  = (pv.netto20 > 0 ? '+' : '') + pv.netto20.toLocaleString('de') + ' €';
+  document.getElementById('r-breakeven').textContent = pv.breakEvenJahr ? `Break-Even in Jahr ${pv.breakEvenJahr}` : 'Break-Even nach 20 Jahren';
+
+  // Extras (Speicher / Wallbox)
+  const extras = document.getElementById('r-extras');
+  extras.innerHTML = '';
+  const extraItems = [];
+  if (state.speicher === 'ja') {
+    const save = Math.round(pv.evKwh * 0.5 * STROMPREIS * 20);
+    extraItems.push({ icon:'🔋', title:'Batteriespeicher', sub:`Erhöht Eigenverbrauch auf ~80 % — ca. +${save.toLocaleString('de')} € über 20 Jahre`, good:true });
+  } else {
+    extraItems.push({ icon:'💡', title:'Speicher empfohlen', sub:'Ein Batteriespeicher würde Deinen Eigenverbrauch von 30 % auf 80 % erhöhen', good:false });
+  }
+  if (state.wallbox === 'ja') {
+    extraItems.push({ icon:'⚡', title:'Wallbox integriert', sub:'PV-Überschuss direkt zum Laden Deines E-Autos nutzen', good:true });
+  }
+  extraItems.forEach(item => {
+    const d = document.createElement('div');
+    d.style.cssText = `display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid ${item.good ? 'rgba(190,242,100,0.2)' : 'rgba(255,255,255,0.1)'};background:${item.good ? 'rgba(190,242,100,0.07)' : 'rgba(255,255,255,0.04)'}`;
+    d.innerHTML = `<span style="font-size:16px;flex-shrink:0;margin-top:1px">${item.icon}</span><div><p style="font-size:13px;font-weight:500;color:#fff;margin-bottom:2px">${item.title}</p><p style="font-size:12px;color:rgba(255,255,255,0.45)">${item.sub}</p></div>`;
+    extras.appendChild(d);
+  });
+
+  // Förderungen
+  const foerder = document.getElementById('r-foerder');
+  foerder.innerHTML = '';
+  [
+    { name:'KfW 270 – Erneuerbare Energien', val:'zinsgünstig ab 1,27 % eff.' },
+    { name:'KfW 442 – Solarstrom für Elektroautos', val:'bis 10.200 € Zuschuss (mit Wallbox)' },
+    { name:'Einspeisevergütung EEG', val:`${Math.round(pv.kwp * 8.2 * 95 * (state.ertragFaktor||1)).toLocaleString('de')} € über 20 Jahre` },
+    { name:'Landesförderung prüfen', val:'Je nach Bundesland bis zu 3.000 € möglich' },
+  ].filter((f,i) => state.wallbox === 'ja' || i !== 1).forEach(f => {
+    const d = document.createElement('div');
+    d.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)';
+    d.innerHTML = `<span style="font-size:12px;color:rgba(255,255,255,0.6)">${f.name}</span><span style="font-size:12px;font-weight:500;color:var(--lime-300)">${f.val}</span>`;
+    foerder.appendChild(d);
+  });
+
+  // Config summary
+  const cfg = document.getElementById('r-config');
+  cfg.innerHTML = '';
+  const od = orientDaten[state.ausrichtung] || orientDaten['s'];
+  const items = [
+    ['Gebäude', hausDaten[state.haustyp]?.label || '–'],
+    ['Dach', dachDaten[state.dachtyp]?.label || '–'],
+    ['Ausrichtung', od.label],
+    ['Wohnfläche', state.wohnflaeche + ' m²'],
+    ['Personen', state.persons + ' Personen'],
+    ['Speicher', state.speicher === 'ja' ? 'Ja' : 'Nein'],
+    ['Wallbox', state.wallbox === 'ja' ? 'Ja' : 'Nein'],
+    ['Eigentümer', state.eigentuemer === 'ja' ? 'Ja' : 'Nein / Mieter'],
+  ];
+  items.forEach(([k,v]) => {
+    const d = document.createElement('div');
+    d.innerHTML = `<span style="color:rgba(255,255,255,0.35)">${k}</span><span style="color:rgba(255,255,255,0.7);font-weight:500">${v}</span>`;
+    cfg.appendChild(d);
+  });
+
+  // 20-Jahre Chart
+  drawResultChart(pv);
+
+  // Right panel metrics
+  document.getElementById('vr-netto').textContent  = (pv.netto20>0?'+':'') + pv.netto20.toLocaleString('de') + ' €';
+  document.getElementById('vr-be').textContent     = pv.breakEvenJahr ? pv.breakEvenJahr + ' Jahre' : '> 20 J.';
+  document.getElementById('vr-co2').textContent    = pv.co2_20 + ' t';
+  document.getElementById('vr-rendite').textContent = pv.rendite + ' %';
+}
+
+function drawResultChart(pv) {
+  const canvas = document.getElementById('vr-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 420, H = 260;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { t:24, r:20, b:36, l:60 };
+  const cw = W - pad.l - pad.r;
+  const ch = H - pad.t - pad.b;
+
+  // Min/max for scale
+  const maxVal = Math.max(...pv.yearly.map(y => y.kumulativ));
+  const minVal = Math.min(-pv.invest, 0);
+  const range  = maxVal - minVal;
+
+  function yPos(v) { return pad.t + ch - ((v - minVal) / range * ch); }
+  function xPos(i) { return pad.l + (i / 19) * cw; }
+
+  // Zero line
+  const zy = yPos(0);
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(pad.l, zy); ctx.lineTo(W - pad.r, zy); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.font = '10px Geist,sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('0 €', pad.l - 4, zy + 4);
+
+  // Investment line
+  const iy = yPos(-pv.invest);
+  ctx.strokeStyle = 'rgba(255,100,100,0.3)';
+  ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(pad.l, iy); ctx.lineTo(W-pad.r, iy); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,120,120,0.5)';
+  ctx.textAlign = 'right';
+  ctx.fillText('-' + pv.invest.toLocaleString('de') + ' €', pad.l - 4, iy + 4);
+
+  // Area under curve
+  ctx.beginPath();
+  pv.yearly.forEach((d, i) => {
+    const x = xPos(i);
+    const y = yPos(d.kumulativ - pv.invest);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(xPos(19), zy); ctx.lineTo(xPos(0), zy); ctx.closePath();
+  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  grad.addColorStop(0, 'rgba(190,242,100,0.25)');
+  grad.addColorStop(1, 'rgba(190,242,100,0.02)');
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(190,242,100,0.9)';
+  ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+  pv.yearly.forEach((d, i) => {
+    const x = xPos(i), y = yPos(d.kumulativ - pv.invest);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Break-even dot
+  if (pv.breakEvenJahr && pv.breakEvenJahr <= 20) {
+    const bi = pv.breakEvenJahr - 1;
+    const bx = xPos(bi), by = yPos(pv.yearly[bi].kumulativ - pv.invest);
+    ctx.beginPath();
+    ctx.arc(bx, by, 5, 0, Math.PI*2);
+    ctx.fillStyle = 'var(--lime-300)';
+    ctx.fill();
+    ctx.strokeStyle = '#055435'; ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(190,242,100,0.85)';
+    ctx.font = '500 10px Geist,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Break-Even', bx, by - 10);
+  }
+
+  // X-axis labels: years 5, 10, 15, 20
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '10px Geist,sans-serif'; ctx.textAlign = 'center';
+  [4, 9, 14, 19].forEach(i => {
+    ctx.fillText('Jahr ' + (i+1), xPos(i), H - pad.b + 14);
+  });
+
+  // Max value label
+  ctx.fillStyle = 'rgba(190,242,100,0.7)';
+  ctx.textAlign = 'right';
+  ctx.fillText('+' + pv.netto20.toLocaleString('de') + ' €', W - pad.r, pad.t + 10);
+}
+
+// ── showOnly updated to include steps 5, 6 and result ─────────────
+function showOnly(stepId) {
+  ['step1','step2','step3','step4','step5','step6','step-result'].forEach(id => {
+    document.getElementById(id)?.classList.toggle('active', id === stepId);
+  });
+}
+
+function showViz(which) {
+  ['house-viz','viz2','viz3','viz4','viz5','viz-result'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = (id === which) ? 'flex' : 'none';
+  });
+  document.getElementById('empty-state').style.display = 'none';
 }
 </script>
 
