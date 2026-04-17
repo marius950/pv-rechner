@@ -61,17 +61,25 @@ export default function Step0Landing() {
         ))}
       </div>
 
-      {/* Social proof */}
+      {/* Social proof with real photos */}
       <div className="lp-proof">
         <div style={{ display: 'flex' }}>
-          {[0, 1, 2].map(i => (
-            <svg key={i} width="28" height="28" viewBox="0 0 28 28" style={{ borderRadius: '50%', marginLeft: i > 0 ? -8 : 0, border: '2px solid var(--bg)' }}>
-              <rect width="28" height="28" fill={i === 0 ? 'rgba(190,242,100,0.18)' : 'rgba(255,255,255,0.08)'} />
-              <circle cx="14" cy="11" r="5" fill={i === 0 ? 'rgba(190,242,100,0.5)' : 'rgba(255,255,255,0.3)'} />
-              <path d="M4 26c0-5.5 4.5-9 10-9s10 3.5 10 9" fill={i === 0 ? 'rgba(190,242,100,0.35)' : 'rgba(255,255,255,0.2)'} />
-            </svg>
+          {['/avatars/user4.jpg', '/avatars/user3.jpg', '/avatars/user1.jpg'].map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt=""
+              width={30} height={30}
+              style={{
+                borderRadius: '50%',
+                marginLeft: i > 0 ? -9 : 0,
+                border: '2px solid var(--bg)',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+              }}
+            />
           ))}
-          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--tagline-bg)', border: '2px solid var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: -8, fontSize: 10, color: 'var(--accent)', fontWeight: 600 }}>+</div>
+          <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--tagline-bg)', border: '2px solid var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: -9, fontSize: 10, color: 'var(--accent)', fontWeight: 700 }}>+</div>
         </div>
         <div>
           <div className="lp-stars">{'★★★★★'.split('').map((s, i) => <span key={i}>{s}</span>)}</div>

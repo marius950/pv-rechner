@@ -171,9 +171,17 @@ export default function LandingRight() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: 380, gap: 9 }}>
-      {/* Label */}
+      {/* Label with real user avatars */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, color: 'var(--text-subtle)', letterSpacing: '.04em' }}>Beispielrechnung</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex' }}>
+            {['/avatars/user2.jpg', '/avatars/user4.jpg'].map((src, i) => (
+              <img key={i} src={src} alt="" width={22} height={22}
+                style={{ borderRadius: '50%', marginLeft: i > 0 ? -7 : 0, border: '1.5px solid var(--bg)', objectFit: 'cover', objectPosition: 'center top' }}/>
+            ))}
+          </div>
+          <span style={{ fontSize: 11, color: 'var(--text-subtle)' }}>Beispielrechnung</span>
+        </div>
         <span style={{ fontSize: 11, color: 'var(--text-faint)', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 100, padding: '2px 9px' }}>
           EFH · 150 m² · Süd
         </span>

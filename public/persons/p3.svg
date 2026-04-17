@@ -1,0 +1,19 @@
+<svg width="54" height="119" viewBox="0 0 54 119" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path d="M23.9961 113C23.9961 109.686 26.6824 107 29.9961 107H43.9961V119H29.9961C26.6824 119 23.9961 116.314 23.9961 113Z" fill="#093524"/>
+<path d="M19.9961 113C19.9961 109.686 22.6824 107 25.9961 107H39.9961V119H25.9961C22.6824 119 19.9961 116.314 19.9961 113Z" fill="#156949"/>
+<rect x="24.9961" y="63" width="19" height="44" fill="#093524"/>
+<path d="M36.75 20C46.9214 20 54.7455 28.9916 53.3398 39.0654L50 63H20V52.0479L6 39.8477L12.9648 31.8555L20 37.9854V36.75C20.0001 27.4993 27.4993 20.0001 36.75 20Z" fill="white"/>
+<path d="M36.75 20C46.9214 20 54.7455 28.9916 53.3398 39.0654L50 63H20V52.0479L6 39.8477L12.9648 31.8555L20 37.9854V36.75C20.0001 27.4993 27.4993 20.0001 36.75 20Z" fill="url(#pattern0_8999_11997)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M35.9961 20V10H30.9961H29.0746H25.9961C25.9961 15.5228 30.4732 20 35.9961 20Z" fill="white"/>
+<path d="M35.9961 20C41.5189 20 45.9961 15.5228 45.9961 10H35.9961V20Z" fill="#093524"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M25.9961 10C25.9961 4.47715 30.4732 0 35.9961 0C41.5189 0 45.9961 4.47715 45.9961 10H35.9961H30.9961L29.4166 6.31323L29.0746 10H25.9961Z" fill="#093524"/>
+<path d="M30.9961 10L29.4166 6.31323L29.0746 10H30.9961Z" fill="white"/>
+<circle cx="30.9961" cy="14" r="1" fill="#093524"/>
+<circle cx="7.3261" cy="34.3268" r="6.22051" transform="rotate(11.3936 7.3261 34.3268)" fill="white"/>
+<defs>
+<pattern id="pattern0_8999_11997" patternContentUnits="objectBoundingBox" width="0.00252612" height="0.111628">
+<use xlink:href="#image0_8999_11997" transform="matrix(0 0.00139535 -0.00126306 0 0.00252612 0)"/>
+</pattern>
+<image id="image0_8999_11997" width="80" height="2" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAACCAYAAADPV1tRAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAACdJREFUeAHtwDEBAAAEBMCng1CiSCSKUEIQwvKDEwsfEOssATHFO1mhvgQEgmTaiAAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>
