@@ -1,126 +1,146 @@
 'use client';
 import { useFunnelStore } from '@/store/funnel';
 import { orientDaten, dachDaten } from '@/lib/data';
-import type { Ausrichtung } from '@/types';
 
-const degMap: Record<Ausrichtung, number> = { s: 0, ow: 0, o: -90, w: 90, n: 180, best: 0 };
+const C = {
+  lime:    '#c7f360',
+  limeBrt: '#bef264',
+  green:   '#156949',
+  dark:    '#093524',
+};
 
-export default function Viz2() {
-  const { ausrichtung, dachtyp, haustyp } = useFunnelStore();
-  const od = ausrichtung ? orientDaten[ausrichtung] : null;
-  const pct = od ? Math.round(od.faktor * 100) : null;
-  const deg = ausrichtung ? degMap[ausrichtung] : 0;
-  const color = pct && pct >= 90 ? 'var(--accent)' : pct && pct >= 70 ? '#EF9F27' : pct ? '#E24B4A' : 'var(--accent)';
+export default function Viz2Compass() {
+  const { ausrichtung, dachtyp } = useFunnelStore();
+  const od   = ausrichtung ? orientDaten[ausrichtung] : null;
+  const pct  = od ? Math.round(od.faktor * 100) : null;
+  const color = pct && pct >= 90 ? C.lime : pct && pct >= 70 ? '#EF9F27' : pct ? '#E24B4A' : C.lime;
   const dName = dachtyp ? dachDaten[dachtyp]?.label : '';
   const oName = od?.label ?? '';
 
+  const isSouthLeft = ausrichtung === 'ow' || ausrichtung === 'w';
+  const isSouthRight = ausrichtung === 's' || ausrichtung === 'ow' || ausrichtung === 'o';
+  const isFullFlach  = dachtyp === 'flach';
+  const isWalm       = dachtyp === 'walm';
+  const isPult       = dachtyp === 'pult';
+  const fillL = isSouthLeft || isFullFlach || isWalm ? 'rgba(199,243,96,0.32)' : 'rgba(255,255,255,0.04)';
+  const fillR = isSouthRight || isFullFlach || isWalm ? 'rgba(199,243,96,0.32)' : 'rgba(255,255,255,0.04)';
+  const fillPult = ausrichtung || isFullFlach ? 'rgba(199,243,96,0.32)' : 'rgba(255,255,255,0.04)';
+
   return (
-    <div style={{ width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 10 }}>
       {/* Badge */}
-      <div className="house-badge show" style={{ alignSelf: 'flex-start' }}>
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 5L6 1l5 4v5.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V5Z"/></svg>
-        {dName}{oName ? ` · ${oName}` : ''}
-      </div>
-
-      {/* Compass + ertrag row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: 12, alignItems: 'center' }}>
-        <svg viewBox="-100 -100 200 200" width="160" height="160" style={{ overflow: 'visible', flexShrink: 0 }}>
-          <defs>
-            <radialGradient id="cgrad2" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(190,242,100,0.08)"/>
-              <stop offset="100%" stopColor="rgba(0,0,0,0)"/>
-            </radialGradient>
-            <filter id="nglow2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-          <circle r="88" fill="url(#cgrad2)"/>
-          <path d="M0,0 L62,-62 A88,88,0,0,1,88,0 Z" fill="rgba(190,242,100,0.17)"/>
-          <path d="M0,0 L88,0 A88,88,0,0,1,62,62 Z" fill="rgba(190,242,100,0.17)"/>
-          <path d="M0,0 L62,-62 A88,88,0,0,0,0,-88 Z" fill="rgba(190,242,100,0.08)"/>
-          <path d="M0,0 L62,62 A88,88,0,0,0,0,88 Z" fill="rgba(190,242,100,0.08)"/>
-          <path d="M0,0 L0,-88 A88,88,0,0,0,-88,0 Z" fill="rgba(255,255,255,0.025)"/>
-          <path d="M0,0 L-88,0 A88,88,0,0,0,0,88 Z" fill="rgba(255,255,255,0.018)"/>
-          <circle r="88" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="1"/>
-          <circle r="74" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1"/>
-          <g stroke="rgba(255,255,255,0.16)" strokeLinecap="round">
-            {[[0,-88,0,-80,1.5],[44,-76,40,-70,1],[76,-44,70,-40,1],[88,0,80,0,1.5],[76,44,70,40,1],[44,76,40,70,1],[0,88,0,80,1.5],[-44,76,-40,70,1],[-76,44,-70,40,1],[-88,0,-80,0,1.5],[-76,-44,-70,-40,1],[-44,-76,-40,-70,1]].map(([x1,y1,x2,y2,w],i) => (
-              <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth={w}/>
-            ))}
-          </g>
-          <text x="0" y="-95" textAnchor="middle" dominantBaseline="middle" fontSize="11" fontFamily="Geist,sans-serif" fontWeight="500" fill="rgba(255,255,255,0.3)">N</text>
-          <text x="0" y="99" textAnchor="middle" dominantBaseline="middle" fontSize="13" fontFamily="Geist,sans-serif" fontWeight="700" fill="rgba(190,242,100,1)">S</text>
-          <text x="-98" y="0" textAnchor="middle" dominantBaseline="middle" fontSize="11" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.28)">W</text>
-          <text x="98" y="0" textAnchor="middle" dominantBaseline="middle" fontSize="11" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.28)">O</text>
-          <text x="0" y="68" textAnchor="middle" dominantBaseline="middle" fontSize="7.5" fontFamily="Geist,sans-serif" fill="rgba(190,242,100,0.45)">optimal</text>
-          <circle r="26" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
-          <g style={{ transformOrigin: '0px 0px', transform: `rotate(${deg}deg)`, transition: 'transform 0.7s cubic-bezier(0.34,1.2,0.64,1)' }}>
-            <polygon points="0,60 -7,12 7,12" fill={color} filter="url(#nglow2)"/>
-            <polygon points="0,-60 -7,-12 7,-12" fill="rgba(255,255,255,0.2)"/>
-            <circle r="7.5" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5"/>
-            <circle r="3" fill={color}/>
-          </g>
-          <text x="0" y="4" textAnchor="middle" dominantBaseline="middle" fontSize="12" fontFamily="Geist,sans-serif" fontWeight="700" fill={color}>{pct !== null ? `${pct} %` : '–'}</text>
-        </svg>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '10px 12px', boxShadow: 'var(--shadow)' }}>
-            <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--text-subtle)', marginBottom: 5 }}>Solarer Ertrag</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ flex: 1, height: 4, background: 'var(--slider-track)', borderRadius: 2, overflow: 'hidden' }}>
-                <div style={{ height: '100%', background: color, borderRadius: 2, width: `${pct ?? 0}%`, transition: 'width 0.4s, background 0.3s' }}/>
-              </div>
-              <span style={{ fontSize: 15, fontWeight: 700, color, minWidth: 40, textAlign: 'right', letterSpacing: '-.02em' }}>{pct !== null ? `${pct} %` : '–'}</span>
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>{od?.desc ?? 'Ausrichtung wählen'}</div>
-          </div>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '10px 12px', boxShadow: 'var(--shadow)' }}>
-            <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--text-subtle)', marginBottom: 3 }}>Ausrichtung</div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-.01em' }}>{oName || '–'}</div>
-          </div>
+      {(dName || oName) && (
+        <div className="house-badge show" style={{ alignSelf: 'flex-start' }}>
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 5L6 1l5 4v5.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V5Z"/></svg>
+          {dName}{oName ? ` · ${oName}` : ''}
         </div>
-      </div>
+      )}
+
+      {/* Ertrag bar */}
+      {pct !== null && (
+        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '12px 16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Solarer Ertragsfaktor</span>
+            <span style={{ fontSize: 18, fontWeight: 700, color, letterSpacing: '-0.02em' }}>{pct} %</span>
+          </div>
+          <div style={{ height: 6, background: 'var(--slider-track)', borderRadius: 3, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: color, borderRadius: 3, width: `${pct}%`, transition: 'width 0.4s, background 0.3s' }}/>
+          </div>
+          <div style={{ fontSize: 11.5, color: 'var(--text-subtle)', marginTop: 6 }}>{od?.desc}</div>
+        </div>
+      )}
 
       {/* Roof plan */}
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '14px 16px', boxShadow: 'var(--shadow)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '14px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--text-subtle)' }}>Draufsicht Dach</span>
+          <div style={{ display: 'flex', gap: 10, fontSize: 10, color: 'var(--text-faint)', alignItems: 'center' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 10, height: 10, background: 'rgba(199,243,96,0.35)', borderRadius: 2, display: 'inline-block' }}/>
+              PV-Fläche
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 10, height: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 2, display: 'inline-block' }}/>
+              Dach
+            </span>
+          </div>
         </div>
-        <svg viewBox="-110 -75 380 170" width="100%">
+        <svg viewBox="-115 -80 390 175" width="100%">
           <defs>
-            <pattern id="hatch2" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-              <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(255,255,255,0.1)" strokeWidth="2"/>
+            <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(199,243,96,0.25)" strokeWidth="2"/>
             </pattern>
           </defs>
-          <g transform="translate(220,-60)">
-            <line x1="0" y1="10" x2="0" y2="-2" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeLinecap="round"/>
-            <polygon points="0,-6 -3,2 3,2" fill="rgba(255,255,255,0.3)"/>
-            <text x="0" y="20" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N</text>
+
+          {/* N arrow */}
+          <g transform="translate(226,-68)">
+            <line x1="0" y1="10" x2="0" y2="-2" stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeLinecap="round"/>
+            <polygon points="0,-6 -3,2 3,2" fill="rgba(255,255,255,0.35)"/>
+            <text x="0" y="20" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.3)">N</text>
           </g>
-          {/* Default: Satteldach EFH plan */}
+
+          {/* Satteldach */}
           {(!dachtyp || dachtyp === 'sattel') && (
             <g>
-              <rect x="-80" y="-55" width="160" height="110" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" rx="2"/>
-              <rect x="-80" y="-55" width="80" height="110" fill={ausrichtung === 'ow' || ausrichtung === 'w' || ausrichtung === 's' ? 'rgba(190,242,100,0.25)' : 'rgba(190,242,100,0)'} rx="2" style={{ transition: 'fill 0.4s' }}/>
-              <rect x="0" y="-55" width="80" height="110" fill={ausrichtung === 'ow' || ausrichtung === 'o' || ausrichtung === 's' ? 'rgba(190,242,100,0.25)' : 'rgba(190,242,100,0)'} rx="2" style={{ transition: 'fill 0.4s' }}/>
-              <line x1="0" y1="-55" x2="0" y2="55" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" strokeDasharray="4 3"/>
-              <text x="0" y="70" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill="rgba(190,242,100,0.5)">→ Süd</text>
+              <rect x="-82" y="-58" width="82" height="116" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" rx="2"/>
+              <rect x="0"   y="-58" width="82" height="116" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" rx="2"/>
+              {/* PV zones */}
+              <rect x="-82" y="-58" width="82" height="116" fill={fillL} rx="2" style={{ transition: 'fill 0.4s' }}/>
+              <rect x="0"   y="-58" width="82" height="116" fill={fillR} rx="2" style={{ transition: 'fill 0.4s' }}/>
+              {(isSouthLeft || isFullFlach) && <rect x="-82" y="-58" width="82" height="116" fill="url(#hatch)" opacity="0.6"/>}
+              {(isSouthRight || isFullFlach) && <rect x="0" y="-58" width="82" height="116" fill="url(#hatch)" opacity="0.6"/>}
+              <line x1="0" y1="-58" x2="0" y2="58" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" strokeDasharray="4 3"/>
+              <text x="-41" y="4" textAnchor="middle" fontSize="10" fontFamily="Geist,sans-serif" fontWeight="600" fill={isSouthLeft ? C.lime : 'rgba(255,255,255,0.3)'}>{isSouthLeft ? '✓' : '–'}</text>
+              <text x="41"  y="4" textAnchor="middle" fontSize="10" fontFamily="Geist,sans-serif" fontWeight="600" fill={isSouthRight ? C.lime : 'rgba(255,255,255,0.3)'}>{isSouthRight ? '✓' : '–'}</text>
+              <text x="0" y="74" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill={C.lime} opacity="0.6">→ Süd</text>
             </g>
           )}
+
+          {/* Flachdach */}
           {dachtyp === 'flach' && (
             <g>
-              <rect x="-80" y="-55" width="160" height="110" fill="rgba(190,242,100,0.18)" stroke="rgba(190,242,100,0.5)" strokeWidth="1.5" rx="2"/>
-              <text x="0" y="70" textAnchor="middle" fontSize="10" fontFamily="Geist,sans-serif" fill="rgba(190,242,100,0.9)" fontWeight="500">100 % nutzbar · frei ausrichtbar</text>
+              <rect x="-82" y="-58" width="164" height="116" fill="rgba(199,243,96,0.22)" stroke={C.lime} strokeWidth="1.5" rx="2" opacity="0.8"/>
+              <rect x="-82" y="-58" width="164" height="116" fill="url(#hatch)" opacity="0.7"/>
+              {/* Module grid on flat roof */}
+              <g opacity="0.7">
+                {[-70,-36,-2,32].map(x => (
+                  [-46,-20,6].map(y => (
+                    <rect key={`${x}-${y}`} x={x} y={y} width="28" height="18" fill="rgba(199,243,96,0.3)" rx="1"/>
+                  ))
+                ))}
+              </g>
+              <text x="0" y="74" textAnchor="middle" fontSize="10" fontFamily="Geist,sans-serif" fill={C.lime} fontWeight="500">100 % nutzbar · frei ausrichtbar</text>
             </g>
           )}
-          {dachtyp === 'walm' && (
-            <g>
-              <polygon points="0,-65 80,0 0,65 -80,0" fill="rgba(190,242,100,0.18)" stroke="rgba(190,242,100,0.5)" strokeWidth="1.5"/>
-              <text x="0" y="82" textAnchor="middle" fontSize="9" fontFamily="Geist,sans-serif" fill="rgba(190,242,100,0.7)" fontWeight="600">Optimale Seite automatisch</text>
-            </g>
-          )}
+
+          {/* Pultdach */}
           {dachtyp === 'pult' && (
             <g>
-              <polygon points="-80,-55 80,-55 70,55 -70,55" fill={ausrichtung ? 'rgba(190,242,100,0.22)' : 'rgba(255,255,255,0.04)'} stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" style={{ transition: 'fill 0.4s' }}/>
-              <text x="0" y="70" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill="rgba(190,242,100,0.5)">→ Süd</text>
+              <polygon points="-82,-58 82,-58 72,58 -72,58" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5"/>
+              <polygon points="-82,-58 82,-58 72,58 -72,58" fill={fillPult} style={{ transition: 'fill 0.4s' }}/>
+              {(ausrichtung) && <polygon points="-82,-58 82,-58 72,58 -72,58" fill="url(#hatch)" opacity="0.6"/>}
+              <line x1="-82" y1="-58" x2="-94" y2="-72" stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
+              <line x1="82"  y1="-58" x2="94"  y2="-72" stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
+              <line x1="-94" y1="-72" x2="94"  y2="-72" stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
+              <text x="0" y="74" textAnchor="middle" fontSize="8" fontFamily="Geist,sans-serif" fill={C.lime} opacity="0.6">→ Süd</text>
+            </g>
+          )}
+
+          {/* Walmdach */}
+          {dachtyp === 'walm' && (
+            <g>
+              <polygon points="0,-68 82,0 0,68 -82,0" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5"/>
+              {/* All faces highlighted for "best" */}
+              <polygon points="0,0 82,0 0,68"   fill="rgba(199,243,96,0.28)" style={{ transition: 'fill 0.4s' }}/>
+              <polygon points="0,0 82,0 0,-68"  fill="rgba(199,243,96,0.18)" style={{ transition: 'fill 0.4s' }}/>
+              <polygon points="0,0 -82,0 0,68"  fill="rgba(199,243,96,0.14)" style={{ transition: 'fill 0.4s' }}/>
+              <polygon points="0,0 -82,0 0,-68" fill="rgba(199,243,96,0.08)" style={{ transition: 'fill 0.4s' }}/>
+              <line x1="0" y1="-68" x2="0" y2="68" stroke="rgba(255,255,255,0.1)" strokeWidth="0.75" strokeDasharray="3 3"/>
+              <line x1="-82" y1="0" x2="82" y2="0" stroke="rgba(255,255,255,0.1)" strokeWidth="0.75" strokeDasharray="3 3"/>
+              <text x="0"   y="82" textAnchor="middle" fontSize="10" fontFamily="Geist,sans-serif" fill={C.lime} fontWeight="700">S</text>
+              <text x="0"   y="-76" textAnchor="middle" fontSize="9" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.25)">N</text>
+              <text x="96"  y="4"   textAnchor="middle" fontSize="9" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.25)">O</text>
+              <text x="-96" y="4"   textAnchor="middle" fontSize="9" fontFamily="Geist,sans-serif" fill="rgba(255,255,255,0.25)">W</text>
             </g>
           )}
         </svg>

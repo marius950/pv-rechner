@@ -11,20 +11,12 @@ export default function RightPanel() {
   // Landing page: show example result
   if (step === 0) return <LandingRight />;
 
-  // Step 2: house thumbnail (minimized) + compass viz side by side
+  // Step 2: house normal + roof plan/ertrag below
   if (step === 2) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 400, position: 'relative', gap: 12 }}>
-        {/* Mini house in top-right */}
-        {haustyp && (
-          <div style={{ position: 'absolute', top: 0, right: 0, width: 110, zIndex: 2 }}>
-            <HouseScene />
-          </div>
-        )}
-        {/* Compass viz takes up main space */}
-        <div style={{ width: '100%', marginTop: haustyp ? 8 : 0 }}>
-          <Viz2Compass />
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 400, gap: 14 }}>
+        <HouseScene />
+        <Viz2Compass />
       </div>
     );
   }
