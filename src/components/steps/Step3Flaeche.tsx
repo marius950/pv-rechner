@@ -30,10 +30,10 @@ export default function Step3Flaeche() {
       <div className="slider-block">
         <div className="slider-header">
           <span className="slider-label">Anzahl Geschosse</span>
-          <div className="slider-val">{geschosse}<span>OG</span></div>
+          <div className="slider-val">{geschosse}<span>{geschosse === 1 ? ' Geschoss' : ' Geschosse'}</span></div>
         </div>
         <input type="range" min={1} max={4} step={1} value={geschosse} onChange={e => setGeschosse(Number(e.target.value))} />
-        <div className="slider-range"><span>1</span><span>4</span></div>
+        <div className="slider-range"><span>1 Geschoss</span><span>4 Geschosse</span></div>
       </div>
 
       <div className="result-preview">
