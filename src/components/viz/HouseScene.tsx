@@ -10,27 +10,28 @@ const C = {
 };
 
 // ── SVG selection — clean 1:1 mapping from Figma ZIPs ────────────
-// Files: /house/{prefix}-{dach}{suffix}.svg
-// prefix = efh | dhh | rh | other
-// dach   = sattel | flach | pult | walm
-// suffix = '' | -car | -bat | -bat-car
+// Combinations:
+//   no extras          → {ht}-{dach}.svg           (PV panels only)
+//   bat only           → {ht}-{dach}-bat.svg        (PV + Batterie)
+//   car only           → {ht}-{dach}-car.svg        (PV + Wallbox/Auto)
+//   bat + car          → {ht}-{dach}-bat-car.svg    (PV + Batterie + Auto)
+//   no PV              → {ht}-base.svg              (Rohbau)
 function getHouseSVG(
   ht: HausTyp | null,
   dt: DachTyp | null,
   hasPV: boolean,
-  hasBat: boolean,
-  hasCar: boolean,
+  hasBat: boolean,  // speicher === 'ja'
+  hasCar: boolean,  // wallbox === 'ja'
 ): string {
   if (!ht) return '/house/efh-base.svg';
   if (!hasPV) return `/house/${ht}-base.svg`;
 
-  const dach   = dt ?? 'sattel';
-  const suffix = hasBat && hasCar ? '-bat-car'
-               : hasBat           ? '-bat'
-               : hasCar           ? '-car'
-               : '';
+  const dach = dt ?? 'sattel';
 
-  return `/house/${ht}-${dach}${suffix}.svg`;
+  if (hasBat && hasCar) return `/house/${ht}-${dach}-bat-car.svg`;
+  if (hasBat)           return `/house/${ht}-${dach}-bat.svg`;
+  if (hasCar)           return `/house/${ht}-${dach}-car.svg`;
+  /* speicher='nein' und wallbox='nein' → nur PV */  return `/house/${ht}-${dach}.svg`;
 }
 
 // ── Build-up animation hook ───────────────────────────────────────
@@ -199,10 +200,12 @@ export default function HouseScene() {
 
   const showRoof    = step !== 1 && !!dachtyp && !!haustyp;
   const showPersons = step === 4;
-  // Only show battery/car in SVG from step 5 onwards (when user has actually selected them)
-  const showExtras  = typeof step === 'number' && step >= 5;
-  const hasBat      = showExtras && speicher === 'ja';
-  const hasCar      = showExtras && wallbox === 'ja';
+  const inStep5     = typeof step === 'number' && step >= 5;
+
+  // Speicher: 'ja' = show battery, 'nein' = no battery, null = not chosen yet (no battery)
+  const hasBat = inStep5 && speicher === 'ja';
+  // Wallbox: 'ja' = show car, 'nein' = no car, null = not chosen yet (no car)
+  const hasCar = inStep5 && wallbox === 'ja';
   const ht          = haustyp ?? 'efh';
 
   const svgSrc = haustyp ? getHouseSVG(haustyp, showRoof ? dachtyp : null, showRoof, hasBat, hasCar) : null;
