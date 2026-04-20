@@ -18,10 +18,14 @@ function getHouseSVG(
   hasCar: boolean,
 ): string {
   if (!ht) return '/house/base.svg';
-  // EFH
+
+  // ── EFH — lime C7F360 front wall ──
   if (ht === 'efh') {
-    if (!hasPV) return '/house/base.svg';
-    if (dt === 'flach') return hasCar ? '/house/efh-flach-car.svg' : '/house/efh-flach.svg';
+    if (!hasPV) return '/house/efh-sattel-base.svg';
+    if (dt === 'flach') {
+      if (hasCar) return '/house/efh-flach-car.svg';
+      return '/house/efh-flach-new.svg';
+    }
     if (dt === 'pult') {
       if (hasBat && hasCar) return '/house/pult-bat-car.svg';
       if (hasBat)           return '/house/pult-bat.svg';
@@ -34,44 +38,48 @@ function getHouseSVG(
       if (hasCar)           return '/house/walm-car.svg';
       return '/house/walm.svg';
     }
-    // sattel
+    // sattel (default EFH)
     if (hasBat && hasCar) return '/house/sattel-bat-car.svg';
     if (hasBat)           return '/house/sattel-bat.svg';
     if (hasCar)           return '/house/sattel-car.svg';
-    return '/house/sattel-bat.svg';
+    return '/house/efh-sattel-pv.svg';
   }
-  // DHH
+
+  // ── DHH — Doppelhaushälfte (single half, lime + dark side) ──
   if (ht === 'dhh') {
-    if (!hasPV) return '/house/dhh-base.svg';
-    if (dt === 'flach') return hasCar ? '/house/efh-flach-car.svg' : '/house/efh-flach.svg';
+    if (!hasPV) return '/house/dhh-nopv.svg';
+    if (dt === 'flach') {
+      if (hasCar) return '/house/efh-flach-car.svg';
+      return '/house/efh-flach-new.svg';
+    }
     if (dt === 'pult') {
       if (hasBat && hasCar) return '/house/pult-bat-car.svg';
       if (hasBat)           return '/house/pult-bat.svg';
       return '/house/pult.svg';
     }
-    if (hasCar) return '/house/dhh-sattel-car.svg';
-    return '/house/dhh-sattel.svg';
-  }
-  // RH
-  if (ht === 'rh') {
-    if (!hasPV) return '/house/rh-flach.svg';
-    if (dt === 'pult') {
-      if (hasBat && hasCar) return '/house/rh-pult-bat-car.svg';
-      if (hasBat)           return '/house/rh-pult-bat.svg';
-      return '/house/rh-pult.svg';
+    if (dt === 'walm') {
+      if (hasCar) return '/house/dhh-pv-car.svg';
+      return '/house/dhh-pv.svg';
     }
-    if (dt === 'walm') return hasBat && hasCar ? '/house/rh-walm-bat-car.svg' : '/house/rh-walm.svg';
-    if (hasBat && hasCar) return '/house/rh-flach-bat-car.svg';
-    if (hasBat)           return '/house/rh-flach-bat.svg';
-    return '/house/rh-flach.svg';
+    // sattel
+    if (hasCar) return '/house/dhh-pv-car.svg';
+    return '/house/dhh-pv.svg';
   }
-  // Other/Gewerbe
+
+  // ── RH — Reihenhaus: 3 units side-by-side ──
+  if (ht === 'rh') {
+    if (!hasPV) return '/house/rh-3units.svg';
+    return '/house/rh-3units-pv.svg';
+  }
+
+  // ── Other/Gewerbe — two separate buildings ──
   if (ht === 'other') {
     if (!hasPV) return '/house/other-sattel.svg';
     if (hasBat && hasCar) return '/house/other-sattel-bat-car.svg';
     if (hasBat)           return '/house/other-sattel-bat.svg';
     return '/house/other-sattel.svg';
   }
+
   return '/house/base.svg';
 }
 
@@ -241,8 +249,10 @@ export default function HouseScene() {
 
   const showRoof    = step !== 1 && !!dachtyp && !!haustyp;
   const showPersons = step === 4;
-  const hasBat      = speicher === 'ja';
-  const hasCar      = wallbox === 'ja';
+  // Only show battery/car in SVG from step 5 onwards (when user has actually selected them)
+  const showExtras  = typeof step === 'number' && step >= 5;
+  const hasBat      = showExtras && speicher === 'ja';
+  const hasCar      = showExtras && wallbox === 'ja';
   const ht          = haustyp ?? 'efh';
 
   const svgSrc = haustyp ? getHouseSVG(haustyp, showRoof ? dachtyp : null, showRoof, hasBat, hasCar) : null;
@@ -336,15 +346,18 @@ export default function HouseScene() {
             transition: 'opacity 0.45s cubic-bezier(0,0,0.2,1), transform 0.45s cubic-bezier(0,0,0.2,1)',
             transformOrigin: '200px 200px',
           }}>
-            {/* Different viewBox crops per haustyp to centre the house */}
-            {ht === 'rh' || ht === 'dhh' ? (
-              <image href={currentSrc} x="-40" y="40" width="480" height="240"
+            {/* Different crops per haustyp to fill our 400px wide viewBox */}
+            {ht === 'rh' ? (
+              <image href={currentSrc} x="-50" y="42" width="500" height="240"
+                preserveAspectRatio="xMidYMid meet"/>
+            ) : ht === 'dhh' ? (
+              <image href={currentSrc} x="-20" y="42" width="440" height="240"
                 preserveAspectRatio="xMidYMid meet"/>
             ) : ht === 'other' ? (
-              <image href={currentSrc} x="-80" y="40" width="560" height="240"
+              <image href={currentSrc} x="-100" y="42" width="600" height="240"
                 preserveAspectRatio="xMidYMid meet"/>
             ) : (
-              <image href={currentSrc} x="0" y="40" width="400" height="240"
+              <image href={currentSrc} x="0" y="42" width="400" height="240"
                 preserveAspectRatio="xMidYMid meet"/>
             )}
           </g>

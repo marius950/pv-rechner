@@ -1,0 +1,34 @@
+<svg width="900" height="772" viewBox="0 0 900 772" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Unit 1 (left, lime front) -->
+  <path d="M55 310H225L285 355V535H55V310Z" fill="#093524"/>
+  <rect x="0" y="355" width="168" height="180" fill="#C7F360"/>
+  <path d="M55 310L168 355H0L55 310Z" fill="#C7F360"/>
+  <path d="M168 355L55 311L0 355" stroke="#093524" stroke-width="1.5" stroke-linejoin="bevel"/>
+  <rect x="48" y="402" width="28" height="26" fill="#093524"/>
+  <path d="M62 396V422" stroke="#C7F360" stroke-width="1.5"/>
+  <path d="M76 409H48" stroke="#C7F360" stroke-width="1.5"/>
+  <rect x="80" y="452" width="25" height="60" fill="#093524"/>
+  <!-- Unit 2 (center, main / highlighted) -->
+  <path d="M355 290H525L585 335V535H355V290Z" fill="#093524"/>
+  <rect x="300" y="335" width="168" height="200" fill="#C7F360"/>
+  <path d="M355 290L468 335H300L355 290Z" fill="#C7F360"/>
+  <path d="M468 335L355 291L300 335" stroke="#093524" stroke-width="2" stroke-linejoin="bevel"/>
+  <rect x="347" y="383" width="30" height="28" fill="#093524"/>
+  <path d="M362 377V405" stroke="#C7F360" stroke-width="1.5"/>
+  <path d="M377 391H347" stroke="#C7F360" stroke-width="1.5"/>
+  <rect x="382" y="448" width="28" height="65" fill="#093524"/>
+  <!-- Unit 3 (right, green shadow) -->
+  <path d="M655 310H825L885 355V535H655V310Z" fill="#093524"/>
+  <rect x="600" y="355" width="168" height="180" fill="#156949"/>
+  <path d="M655 310L768 355H600L655 310Z" fill="#156949"/>
+  <path d="M768 355L655 311L600 355" stroke="#093524" stroke-width="1.5" stroke-linejoin="bevel"/>
+  <rect x="648" y="402" width="28" height="26" fill="#093524"/>
+  <path d="M662 396V422" stroke="#156949" stroke-width="1.5"/>
+  <path d="M676 409H648" stroke="#156949" stroke-width="1.5"/>
+  <rect x="680" y="452" width="25" height="60" fill="#093524"/>
+  <!-- Dividers between units -->
+  <line x1="300" y1="335" x2="300" y2="535" stroke="#093524" stroke-width="2" opacity="0.5"/>
+  <line x1="600" y1="355" x2="600" y2="535" stroke="#093524" stroke-width="2" opacity="0.5"/>
+  <!-- Ground line -->
+  <line x1="0" y1="535" x2="900" y2="535" stroke="#093524" stroke-width="2" opacity="0.4"/>
+</svg>
