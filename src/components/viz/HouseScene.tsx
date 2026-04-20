@@ -9,13 +9,70 @@ const C = {
   green: '#156949', dark: '#093524', mid: '#055435', ground: '#0a4228',
 };
 
-// ── SVG selection ─────────────────────────────────────────────────
-function getHouseSVG(dt: DachTyp | null, hasBat: boolean, hasCar: boolean): string {
-  if (!dt) return '/house/base.svg';
-  if (hasBat && hasCar) return `/house/${dt}-bat-car.svg`;
-  if (hasBat)           return `/house/${dt}-bat.svg`;
-  if (hasCar)           return `/house/${dt}-bat.svg`; // panels without bat
-  return `/house/${dt}-bat.svg`; // always show with panels once dach chosen
+// ── SVG selection per haustyp × dachtyp × state ──────────────────
+function getHouseSVG(
+  ht: HausTyp | null,
+  dt: DachTyp | null,
+  hasPV: boolean,
+  hasBat: boolean,
+  hasCar: boolean,
+): string {
+  if (!ht) return '/house/base.svg';
+  // EFH
+  if (ht === 'efh') {
+    if (!hasPV) return '/house/base.svg';
+    if (dt === 'flach') return hasCar ? '/house/efh-flach-car.svg' : '/house/efh-flach.svg';
+    if (dt === 'pult') {
+      if (hasBat && hasCar) return '/house/pult-bat-car.svg';
+      if (hasBat)           return '/house/pult-bat.svg';
+      if (hasCar)           return '/house/sattel-car.svg';
+      return '/house/pult.svg';
+    }
+    if (dt === 'walm') {
+      if (hasBat && hasCar) return '/house/walm-bat-car.svg';
+      if (hasBat)           return '/house/walm-bat.svg';
+      if (hasCar)           return '/house/walm-car.svg';
+      return '/house/walm.svg';
+    }
+    // sattel
+    if (hasBat && hasCar) return '/house/sattel-bat-car.svg';
+    if (hasBat)           return '/house/sattel-bat.svg';
+    if (hasCar)           return '/house/sattel-car.svg';
+    return '/house/sattel-bat.svg';
+  }
+  // DHH
+  if (ht === 'dhh') {
+    if (!hasPV) return '/house/dhh-base.svg';
+    if (dt === 'flach') return hasCar ? '/house/efh-flach-car.svg' : '/house/efh-flach.svg';
+    if (dt === 'pult') {
+      if (hasBat && hasCar) return '/house/pult-bat-car.svg';
+      if (hasBat)           return '/house/pult-bat.svg';
+      return '/house/pult.svg';
+    }
+    if (hasCar) return '/house/dhh-sattel-car.svg';
+    return '/house/dhh-sattel.svg';
+  }
+  // RH
+  if (ht === 'rh') {
+    if (!hasPV) return '/house/rh-flach.svg';
+    if (dt === 'pult') {
+      if (hasBat && hasCar) return '/house/rh-pult-bat-car.svg';
+      if (hasBat)           return '/house/rh-pult-bat.svg';
+      return '/house/rh-pult.svg';
+    }
+    if (dt === 'walm') return hasBat && hasCar ? '/house/rh-walm-bat-car.svg' : '/house/rh-walm.svg';
+    if (hasBat && hasCar) return '/house/rh-flach-bat-car.svg';
+    if (hasBat)           return '/house/rh-flach-bat.svg';
+    return '/house/rh-flach.svg';
+  }
+  // Other/Gewerbe
+  if (ht === 'other') {
+    if (!hasPV) return '/house/other-sattel.svg';
+    if (hasBat && hasCar) return '/house/other-sattel-bat-car.svg';
+    if (hasBat)           return '/house/other-sattel-bat.svg';
+    return '/house/other-sattel.svg';
+  }
+  return '/house/base.svg';
 }
 
 // ── Build-up animation hook ───────────────────────────────────────
@@ -188,7 +245,7 @@ export default function HouseScene() {
   const hasCar      = wallbox === 'ja';
   const ht          = haustyp ?? 'efh';
 
-  const svgSrc = haustyp ? getHouseSVG(showRoof ? dachtyp : null, hasBat, hasCar) : null;
+  const svgSrc = haustyp ? getHouseSVG(haustyp, showRoof ? dachtyp : null, showRoof, hasBat, hasCar) : null;
   const { visible: houseVisible, currentSrc } = useHouseReveal(svgSrc);
 
   // Also animate scene in when haustyp first selected
@@ -279,12 +336,17 @@ export default function HouseScene() {
             transition: 'opacity 0.45s cubic-bezier(0,0,0.2,1), transform 0.45s cubic-bezier(0,0,0.2,1)',
             transformOrigin: '200px 200px',
           }}>
-            <image
-              href={currentSrc}
-              x="0" y="40"
-              width="400" height="240"
-              preserveAspectRatio="xMidYMid meet"
-            />
+            {/* Different viewBox crops per haustyp to centre the house */}
+            {ht === 'rh' || ht === 'dhh' ? (
+              <image href={currentSrc} x="-40" y="40" width="480" height="240"
+                preserveAspectRatio="xMidYMid meet"/>
+            ) : ht === 'other' ? (
+              <image href={currentSrc} x="-80" y="40" width="560" height="240"
+                preserveAspectRatio="xMidYMid meet"/>
+            ) : (
+              <image href={currentSrc} x="0" y="40" width="400" height="240"
+                preserveAspectRatio="xMidYMid meet"/>
+            )}
           </g>
         )}
 
