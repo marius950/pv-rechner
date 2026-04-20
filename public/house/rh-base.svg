@@ -1,0 +1,24 @@
+<svg width="811" height="772" viewBox="0 0 811 772" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M193 237H619L730.5 312V535H193V237Z" fill="#093524"/>
+<rect x="81" y="312" width="223" height="223" fill="#156949"/>
+<rect x="304" y="312" width="427" height="223" fill="#F4F5F5"/>
+<rect x="304" y="312" width="145" height="223" fill="#F4F5F5"/>
+<rect x="449" y="312" width="145" height="223" fill="#F4F5F5"/>
+<rect x="359" y="449" width="39" height="86" fill="#093524"/>
+<rect x="504" y="449" width="39" height="86" fill="#093524"/>
+<rect x="645" y="449" width="39" height="86" fill="#093524"/>
+<path d="M192.5 237L304 312H81L192.5 237Z" fill="#156949"/>
+<rect x="172" y="410" width="40" height="39" fill="#093524"/>
+<rect x="172" y="341" width="40" height="39" fill="#093524"/>
+<rect x="357" y="341" width="40" height="39" fill="#093524"/>
+<rect x="504" y="341" width="40" height="39" fill="#093524"/>
+<rect x="645" y="341" width="40" height="39" fill="#093524"/>
+<path d="M449 535V312" stroke="#156949" stroke-width="2"/>
+<path d="M594 535V312" stroke="#156949" stroke-width="2"/>
+<path d="M304 312L192.5 238L81 312" stroke="#093524" stroke-width="2" stroke-linejoin="bevel"/>
+<path d="M192 335V387.5" stroke="#156949" stroke-width="2"/>
+<path d="M218.5 361H166" stroke="#156949" stroke-width="2"/>
+<path d="M192 404V456.5" stroke="#156949" stroke-width="2"/>
+<path d="M218.5 430H166" stroke="#156949" stroke-width="2"/>
+<path d="M304 312L192.5 238L81 312" stroke="#093524" stroke-width="2" stroke-linejoin="bevel"/>
+</svg>

@@ -14,23 +14,19 @@
 <path d="M397.5 430H345" stroke="#156949" stroke-width="2"/>
 <path d="M440 404V456.5" stroke="#156949" stroke-width="2"/>
 <path d="M466.5 430H414" stroke="#156949" stroke-width="2"/>
-<path d="M251 237H643.572H785V535H251V237Z" fill="#093524"/>
-<rect x="344" y="449" width="39" height="86" fill="#093524"/>
-<rect x="475" y="259" width="310" height="276" fill="#156949"/>
-<rect x="575" y="410" width="40" height="39" fill="#093524"/>
-<rect x="644" y="410" width="40" height="39" fill="#093524"/>
-<rect x="343" y="341" width="40" height="39" fill="#093524"/>
-<path d="M363 335V387.5" stroke="#C7F360" stroke-width="2"/>
-<path d="M389.5 361H337" stroke="#C7F360" stroke-width="2"/>
-<path d="M595 404V456.5" stroke="#156949" stroke-width="2"/>
-<path d="M621.5 430H569" stroke="#156949" stroke-width="2"/>
-<path d="M664 404V456.5" stroke="#156949" stroke-width="2"/>
-<path d="M690.5 430H638" stroke="#156949" stroke-width="2"/>
-<rect x="251" y="312" width="224" height="223" fill="#F4F5F5"/>
-<rect x="343.414" y="449" width="39.1749" height="86" fill="#093524"/>
-<rect width="224" height="2" transform="matrix(1 0 0 -1 251 259)" fill="#093524"/>
-<path d="M363 259H475V312H251V259H363Z" fill="#F4F5F5"/>
-<rect x="342.406" y="341" width="40.1794" height="39" fill="#093524"/>
+<path d="M363 237H672.5L784 312V535H363V237Z" fill="#093524"/>
+<rect x="251" y="312" width="223" height="223" fill="#F4F5F5"/>
+<rect x="343" y="449" width="39" height="86" fill="#093524"/>
+<rect x="474" y="312" width="310" height="223" fill="#156949"/>
+<rect x="574" y="410" width="40" height="39" fill="#093524"/>
+<rect x="643" y="410" width="40" height="39" fill="#093524"/>
+<path d="M362.5 237L474 312H251L362.5 237Z" fill="#F4F5F5"/>
+<path d="M474 312L362.5 238L251 312" stroke="#093524" stroke-width="2" stroke-linejoin="bevel"/>
+<rect x="342" y="341" width="40" height="39" fill="#093524"/>
 <path d="M362 335V387.5" stroke="#F4F5F5" stroke-width="2"/>
 <path d="M388.5 361H336" stroke="#F4F5F5" stroke-width="2"/>
+<path d="M594 404V456.5" stroke="#156949" stroke-width="2"/>
+<path d="M620.5 430H568" stroke="#156949" stroke-width="2"/>
+<path d="M663 404V456.5" stroke="#156949" stroke-width="2"/>
+<path d="M689.5 430H637" stroke="#156949" stroke-width="2"/>
 </svg>

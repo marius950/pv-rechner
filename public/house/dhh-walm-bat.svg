@@ -1,0 +1,56 @@
+<svg width="1206" height="772" viewBox="0 0 1206 772" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M224 235H533.5L645 310V533H224V235Z" fill="#093524"/>
+<rect x="112" y="310" width="223" height="223" fill="#156949"/>
+<rect x="204" y="447" width="39" height="86" fill="#093524"/>
+<rect x="335" y="310" width="310" height="223" fill="#156949"/>
+<path d="M223.5 235L335 310H112L223.5 235Z" fill="#156949"/>
+<path d="M335 310L223.5 236L112 310" stroke="#093524" stroke-width="2" stroke-linejoin="bevel"/>
+<rect x="203" y="339" width="40" height="39" fill="#093524"/>
+<path d="M223 333V385.5" stroke="#156949" stroke-width="2"/>
+<path d="M249.5 359H197" stroke="#156949" stroke-width="2"/>
+<path d="M446.5 235L813 234L869 309V533H446.5V235Z" fill="#093524"/>
+<rect x="558" y="313" width="311" height="221" fill="#F4F5F5"/>
+<rect x="646" y="312" width="222" height="221" fill="#F4F5F5" stroke="#093524" stroke-width="2"/>
+<mask id="path-14-inside-1_9006_6272" fill="white">
+<path d="M558 313H869V534H558V313Z"/>
+</mask>
+<path d="M869 534V536H871V534H869ZM558 534H556V536H558V534ZM869 313H867V534H869H871V313H869ZM869 534V532H558V534V536H869V534ZM558 534H560V313H558H556V534H558Z" fill="#156949" mask="url(#path-14-inside-1_9006_6272)"/>
+<rect x="428" y="447.711" width="39" height="86.2886" fill="#093524"/>
+<rect x="427" y="339.35" width="40" height="39.1309" fill="#093524"/>
+<rect x="335" y="311" width="223" height="223" fill="#156949"/>
+<rect x="427" y="448" width="39" height="86" fill="#093524"/>
+<path d="M446.5 236H502.25L558 311H335L390.75 236H446.5Z" fill="#156949"/>
+<path d="M558 311L502.25 236M335 311L390.75 236M390.75 236H446.5H502.25M390.75 236H502.25" stroke="#093524" stroke-width="2"/>
+<rect x="426" y="340" width="40" height="39" fill="#093524"/>
+<path d="M446 334V386.5" stroke="#156949" stroke-width="2"/>
+<path d="M472.5 360H420" stroke="#156949" stroke-width="2"/>
+<path d="M571 252H622L653 291H602L571 252Z" fill="#C7F360"/>
+<path d="M558 263H633" stroke="#093524" stroke-width="2"/>
+<path d="M574 275H649" stroke="#093524" stroke-width="2"/>
+<path d="M596 250L634 297.5" stroke="#093524" stroke-width="2"/>
+<path d="M643 252H694L725 291H674L643 252Z" fill="#C7F360"/>
+<path d="M630 263H705" stroke="#093524" stroke-width="2"/>
+<path d="M646 275H721" stroke="#093524" stroke-width="2"/>
+<path d="M668 250L706 297.5" stroke="#093524" stroke-width="2"/>
+<path d="M712 252H763L794 291H743L712 252Z" fill="#C7F360"/>
+<path d="M699 263H774" stroke="#093524" stroke-width="2"/>
+<path d="M715 275H790" stroke="#093524" stroke-width="2"/>
+<path d="M737 250L775 297.5" stroke="#093524" stroke-width="2"/>
+<rect x="55" y="532" width="1039" height="2" fill="#093524"/>
+<rect x="556" y="589" width="87" height="91" fill="#F4F5F5"/>
+<rect x="556" y="577" width="87" height="24" rx="12" fill="#F4F5F5"/>
+<rect x="556" y="657" width="87" height="23" fill="#156949"/>
+<rect x="556" y="645" width="87" height="24" rx="12" fill="#C7F360"/>
+<rect x="588" y="574" width="23" height="12" fill="#F4F5F5"/>
+<rect x="588" y="571" width="23" height="6" rx="3" fill="#F4F5F5"/>
+<path d="M607.832 610L586 638.063H596.071L592.168 660L614 631.937H603.929L607.832 610Z" fill="#093524"/>
+<path d="M600 313V571" stroke="#156949" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="779" y="424" width="38" height="40" fill="#C7F360"/>
+<path d="M802.476 429L790 445.277H795.755L793.524 458L806 441.723H800.245L802.476 429Z" fill="#093524"/>
+<path d="M798 463V489C798 495.627 803.373 501 810 501H893" stroke="#156949" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="893" y="482.4" width="177.312" height="36.8007" rx="18.4004" fill="#156949"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M981.236 464H959.072C948.91 464 940.672 472.238 940.672 482.4H981.236V464Z" fill="#F4F5F5"/>
+<path d="M1021.8 482.4C1021.8 472.238 1013.56 464 1003.4 464H981.236V482.4H1021.8Z" fill="#156949"/>
+<rect x="932.289" y="510.818" width="16.7642" height="15.9278" rx="7.96389" fill="#F4F5F5" stroke="#093524" stroke-width="10"/>
+<rect x="1013.42" y="510.818" width="16.7642" height="15.9278" rx="7.96389" fill="#F4F5F5" stroke="#093524" stroke-width="10"/>
+</svg>

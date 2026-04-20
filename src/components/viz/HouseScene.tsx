@@ -9,7 +9,11 @@ const C = {
   green: '#156949', dark: '#093524', mid: '#055435', ground: '#0a4228',
 };
 
-// ── SVG selection per haustyp × dachtyp × state ──────────────────
+// ── SVG selection — clean 1:1 mapping from Figma ZIPs ────────────
+// Files: /house/{prefix}-{dach}{suffix}.svg
+// prefix = efh | dhh | rh | other
+// dach   = sattel | flach | pult | walm
+// suffix = '' | -car | -bat | -bat-car
 function getHouseSVG(
   ht: HausTyp | null,
   dt: DachTyp | null,
@@ -17,70 +21,16 @@ function getHouseSVG(
   hasBat: boolean,
   hasCar: boolean,
 ): string {
-  if (!ht) return '/house/base.svg';
+  if (!ht) return '/house/efh-base.svg';
+  if (!hasPV) return `/house/${ht}-base.svg`;
 
-  // ── EFH — lime C7F360 front wall ──
-  if (ht === 'efh') {
-    if (!hasPV) return '/house/efh-sattel-base.svg';
-    if (dt === 'flach') {
-      if (hasCar) return '/house/efh-flach-car.svg';
-      return '/house/efh-flach-new.svg';
-    }
-    if (dt === 'pult') {
-      if (hasBat && hasCar) return '/house/pult-bat-car.svg';
-      if (hasBat)           return '/house/pult-bat.svg';
-      if (hasCar)           return '/house/sattel-car.svg';
-      return '/house/pult.svg';
-    }
-    if (dt === 'walm') {
-      if (hasBat && hasCar) return '/house/walm-bat-car.svg';
-      if (hasBat)           return '/house/walm-bat.svg';
-      if (hasCar)           return '/house/walm-car.svg';
-      return '/house/walm.svg';
-    }
-    // sattel (default EFH)
-    if (hasBat && hasCar) return '/house/sattel-bat-car.svg';
-    if (hasBat)           return '/house/sattel-bat.svg';
-    if (hasCar)           return '/house/sattel-car.svg';
-    return '/house/efh-sattel-pv.svg';
-  }
+  const dach   = dt ?? 'sattel';
+  const suffix = hasBat && hasCar ? '-bat-car'
+               : hasBat           ? '-bat'
+               : hasCar           ? '-car'
+               : '';
 
-  // ── DHH — Doppelhaushälfte (single half, lime + dark side) ──
-  if (ht === 'dhh') {
-    if (!hasPV) return '/house/dhh-nopv.svg';
-    if (dt === 'flach') {
-      if (hasCar) return '/house/efh-flach-car.svg';
-      return '/house/efh-flach-new.svg';
-    }
-    if (dt === 'pult') {
-      if (hasBat && hasCar) return '/house/pult-bat-car.svg';
-      if (hasBat)           return '/house/pult-bat.svg';
-      return '/house/pult.svg';
-    }
-    if (dt === 'walm') {
-      if (hasCar) return '/house/dhh-pv-car.svg';
-      return '/house/dhh-pv.svg';
-    }
-    // sattel
-    if (hasCar) return '/house/dhh-pv-car.svg';
-    return '/house/dhh-pv.svg';
-  }
-
-  // ── RH — Reihenhaus: 3 units side-by-side ──
-  if (ht === 'rh') {
-    if (!hasPV) return '/house/rh-3units.svg';
-    return '/house/rh-3units-pv.svg';
-  }
-
-  // ── Other/Gewerbe — two separate buildings ──
-  if (ht === 'other') {
-    if (!hasPV) return '/house/other-sattel.svg';
-    if (hasBat && hasCar) return '/house/other-sattel-bat-car.svg';
-    if (hasBat)           return '/house/other-sattel-bat.svg';
-    return '/house/other-sattel.svg';
-  }
-
-  return '/house/base.svg';
+  return `/house/${ht}-${dach}${suffix}.svg`;
 }
 
 // ── Build-up animation hook ───────────────────────────────────────
