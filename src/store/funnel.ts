@@ -12,6 +12,7 @@ type Actions = {
   setPersons: (n: number) => void;
   setSpeicher: (v: 'ja' | 'nein') => void;
   setWallbox: (v: 'ja' | 'nein') => void;
+  setWaermepumpe: (v: 'ja' | 'nein') => void;
   setEigentuemer: (v: 'ja' | 'nein') => void;
   setZeitplan: (v: string) => void;
   setLead: (name: string, email: string, phone: string) => void;
@@ -31,6 +32,7 @@ const defaults: FunnelState = {
   persons: 3,
   speicher: null,
   wallbox: null,
+  waermepumpe: null,
   eigentuemer: null,
   zeitplan: null,
   leadName: '',
@@ -51,6 +53,7 @@ export const useFunnelStore = create<FunnelState & Actions>((set) => ({
   setPersons:     (persons)        => set({ persons }),
   setSpeicher:    (speicher)       => set({ speicher }),
   setWallbox:     (wallbox)        => set({ wallbox }),
+  setWaermepumpe: (waermepumpe)    => set({ waermepumpe }),
   setEigentuemer: (eigentuemer)    => set({ eigentuemer }),
   setZeitplan:    (zeitplan)       => set({ zeitplan }),
   setLead:        (leadName, leadEmail, leadPhone) => set({ leadName, leadEmail, leadPhone }),

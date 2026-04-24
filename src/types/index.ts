@@ -14,7 +14,8 @@ export interface FunnelState {
   geschosse: number;
   persons: number;
   speicher: 'ja' | 'nein' | null;
-  wallbox: 'ja' | 'nein' | null;
+  wallbox:  'ja' | 'nein' | null;
+  waermepumpe: 'ja' | 'nein' | null;  // ← NEU
   eigentuemer: 'ja' | 'nein' | null;
   zeitplan: string | null;
   leadName: string;

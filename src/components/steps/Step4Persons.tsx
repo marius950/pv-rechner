@@ -18,7 +18,7 @@ const personContexts: Record<number, string> = {
 
 export default function Step4Persons() {
   const { persons, setPersons, setStep } = useFunnelStore();
-  const total = calcVerbrauch(persons);
+  const total = calcVerbrauch(persons, null, null);
   const cost  = Math.round(total * STROMPREIS);
 
   return (

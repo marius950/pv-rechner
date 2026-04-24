@@ -6,10 +6,10 @@ import CTAButton from '@/components/ui/CTAButton';
 import BackButton from '@/components/ui/BackButton';
 
 export default function Step3Flaeche() {
-  const { wohnflaeche, geschosse, haustyp, nutzPct, setWohnflaeche, setGeschosse, setStep } = useFunnelStore();
+  const { wohnflaeche, geschosse, haustyp, dachtyp, nutzPct, setWohnflaeche, setGeschosse, setStep } = useFunnelStore();
 
   const faktor = hausDaten[haustyp ?? 'efh']?.faktor ?? 1.0;
-  const { gesamt, nutzbar, module, kwp } = calcDachflaeche(wohnflaeche, geschosse, haustyp ?? 'efh', faktor, nutzPct);
+  const { gesamt, nutzbar, module, kwp } = calcDachflaeche(wohnflaeche, geschosse, haustyp ?? 'efh', dachtyp ?? 'sattel', nutzPct);
 
   return (
     <div>
